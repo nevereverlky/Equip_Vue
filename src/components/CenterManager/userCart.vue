@@ -105,7 +105,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="item in roleMenu">
+                    <tr v-for="item in roleMenu" :key="item.id">
                       <td>{{item.name}}</td>
                       <td>{{item.number}}</td>
                       <td>
@@ -133,83 +133,83 @@
 </template>
 
 <script>
-  export default {
-    name: 'userCart',
-    data () {
-      return {
-        roleMenu: [
+export default {
+  name: 'userCart',
+  data () {
+    return {
+      roleMenu: [
+        {
+          name: '企业管理员',
+          number: 5
+        },
+        {
+          name: '设备管理员',
+          number: 12
+        },
+        {
+          name: '系统装维员',
+          number: 12
+        },
+        {
+          name: '普通用户',
+          number: 28
+        }
+      ]
+    }
+  },
+  mounted () {
+    this.drawLine();
+  },
+  methods: {
+    drawLine () {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = echarts.init(document.getElementById('myChart'))
+      // 绘制图表
+      myChart.setOption({
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          top: '5%',
+          left: 'center'
+        },
+        series: [
           {
-            name: '企业管理员',
-            number: 5
-          },
-          {
-            name: '设备管理员',
-            number: 12
-          },
-          {
-            name: '系统装维员',
-            number: 12
-          },
-          {
-            name: '普通用户',
-            number: 28
+            name: '人员角色',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '15',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              {value: 484, name: '企业管理员', itemStyle: { color: '#3b5998' }},
+              {value: 580, name: '设备管理员', itemStyle: { color: '#55acee' }},
+              {value: 735, name: '系统装维员', itemStyle: { color: '#fba540' }},
+              {value: 1048, name: '普通用户', itemStyle: { color: '#f5365c' }}
+            ]
           }
         ]
-      }
-    },
-    mounted(){
-      this.drawLine();
-    },
-    methods: {
-      drawLine(){
-        // 基于准备好的dom，初始化echarts实例
-        let myChart = echarts.init(document.getElementById('myChart'))
-        // 绘制图表
-        myChart.setOption({
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            top: '5%',
-            left: 'center'
-          },
-          series: [
-            {
-              name: '人员角色',
-              type: 'pie',
-              radius: ['40%', '70%'],
-              avoidLabelOverlap: false,
-              itemStyle: {
-                borderRadius: 10,
-                borderColor: '#fff',
-                borderWidth: 2
-              },
-              label: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '15',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: false
-              },
-              data: [
-                {value: 484, name: '企业管理员', itemStyle: { color: '#3b5998' }},
-                {value: 580, name: '设备管理员', itemStyle: { color: '#55acee' }},
-                {value: 735, name: '系统装维员', itemStyle: { color: '#fba540' }},
-                {value: 1048, name: '普通用户', itemStyle: { color: '#f5365c' }}
-              ]
-            }
-          ]
-        });
-      }
+      });
     }
   }
+}
 </script>
 
 <style scoped>

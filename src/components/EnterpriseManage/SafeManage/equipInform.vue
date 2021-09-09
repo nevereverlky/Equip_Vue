@@ -58,7 +58,7 @@
                           <div class="col-lg-12">
                             <div class="card-deck">
                               <!--<div v-for="item in requestData.slice((currentPage-1)*pageSize,currentPage*pageSize)">-->
-                              <div v-for="item in formData">
+                              <div v-for="item in formData" :key="item.equipInformId">
                                 <div style="margin: 0 0 15px 0">
                                   <div class="card">
                                     <div class="card-body">
@@ -112,95 +112,95 @@
 </template>
 
 <script>
-  import request from '../../../utils/request'
-  export default {
-    name: 'equipInform',
-    inject: ['reload'],
-    data() {
-      return {
-        formData: [],
-        currentPage: 1, // 当前页码
-        total: 20, // 总条数
-        formData_length: 0, //总条目数
-        pageSize: 20, // 每页的数据条数
-        search_inWarehouse: true,
-        search_updateWarehouse: true
-      };
+import request from '../../../utils/request'
+export default {
+  name: 'equipInform',
+  inject: ['reload'],
+  data () {
+    return {
+      formData: [],
+      currentPage: 1, // 当前页码
+      total: 20, // 总条数
+      formData_length: 0, // 总条目数
+      pageSize: 20, // 每页的数据条数
+      search_inWarehouse: true,
+      search_updateWarehouse: true
+    };
+  },
+  created () {
+    this.getformData();
+  },
+  methods: {
+    getformData () {
+      let _this = this;
+      request.$get('/securityForm/forms/equipInform', {
+        size: _this.pageSize,
+        fromIndex: _this.pageSize * (_this.currentPage - 1),
+        inWarehouse: _this.search_inWarehouse,
+        updateWarehouse: _this.search_updateWarehouse
+      }, (res) => {
+        console.log(res.data.data);
+        let counts = res.data.data.counts;
+        let formdata = res.data.data.commonEquipInforms;
+        _this.formData = formdata;
+        _this.formData_length = counts;
+      }, _this);
     },
-    created () {
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
+      this.currentPage = 1;
+      this.pageSize = val;
       this.getformData();
     },
-    methods: {
-      getformData() {
-        let _this = this;
-        request.$get('/securityForm/forms/equipInform', {
-          size: _this.pageSize,
-          fromIndex: _this.pageSize*(_this.currentPage-1),
-          inWarehouse: _this.search_inWarehouse,
-          updateWarehouse: _this.search_updateWarehouse
-        }, (res) => {
-          console.log(res.data.data);
-          let counts = res.data.data.counts;
-          let formdata = res.data.data.commonEquipInforms;
-          _this.formData = formdata;
-          _this.formData_length = counts;
-        }, _this);
-      },
-      //每页条数改变时触发 选择一页显示多少行
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.currentPage = 1;
-        this.pageSize = val;
-        this.getformData();
-      },
-      //当前页改变时触发 跳转其他页
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.currentPage = val;
-        this.getformData();
-      },
-      getdetail(e) {
-        this.$router.push({
-          path: '/informdetail',
-          name: 'informDetail',
-          query: {
-            equipInformId: e
-          }
-        })
-      },
-      reset() {
-        this.search_inWarehouse= true;
-        this.search_updateWarehouse= true;
-        this.getformData();
-        request.message(this, '重置成功', 'success');
-      },
-      handleSearch_inWarehouse(val) {
-        let _this = this;
-        console.log(val)
-        let search = val;
-        _this.search_inWarehouse = search;
-        _this.currentPage = 1;
-        _this.getformData();
-      },
-      handleSearch_updateWarehouse(val) {
-        let _this = this;
-        console.log(val)
-        let search = val;
-        _this.search_updateWarehouse = search;
-        _this.currentPage = 1;
-        _this.getformData();
-      },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getformData();
     },
-    watch: {
-      //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-      search_inWarehouse (newVal) {
-        this.handleSearch_inWarehouse(newVal);
-      },
-      search_updateWarehouse (newVal) {
-        this.handleSearch_updateWarehouse(newVal);
-      }
+    getdetail (e) {
+      this.$router.push({
+        path: '/informdetail',
+        name: 'informDetail',
+        query: {
+          equipInformId: e
+        }
+      })
+    },
+    reset () {
+      this.search_inWarehouse = true;
+      this.search_updateWarehouse = true;
+      this.getformData();
+      request.message(this, '重置成功', 'success');
+    },
+    handleSearch_inWarehouse (val) {
+      let _this = this;
+      console.log(val)
+      let search = val;
+      _this.search_inWarehouse = search;
+      _this.currentPage = 1;
+      _this.getformData();
+    },
+    handleSearch_updateWarehouse (val) {
+      let _this = this;
+      console.log(val)
+      let search = val;
+      _this.search_updateWarehouse = search;
+      _this.currentPage = 1;
+      _this.getformData();
+    }
+  },
+  watch: {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search_inWarehouse (newVal) {
+      this.handleSearch_inWarehouse(newVal);
+    },
+    search_updateWarehouse (newVal) {
+      this.handleSearch_updateWarehouse(newVal);
     }
   }
+}
 </script>
 
 <style scoped>

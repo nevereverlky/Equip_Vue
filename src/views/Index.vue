@@ -17,7 +17,7 @@ export default {
   components: {Backtotop, Topbar, Sidebar},
   provide () { // 注册一个方法
     return {
-      reload: this.reload,
+      reload: this.reload
       // notice: ''
     }
   },
@@ -40,37 +40,37 @@ export default {
     let mailboxNotice = JSON.parse(localStorage.getItem('mailboxNotice'));
     let wxOpenIdNotice = JSON.parse(localStorage.getItem('wxOpenIdNotice'));
     if (systemNotice) {
-        this.timer = window.setTimeout(() => {
-          _this.$notify({
-            title: '系统异常提醒',
-            message: systemNotice,
-            position: 'bottom-right',
-            type: 'warning',
-            duration: 0
-          });
+      this.timer = window.setTimeout(() => {
+        _this.$notify({
+          title: '系统异常提醒',
+          message: systemNotice,
+          position: 'bottom-right',
+          type: 'warning',
+          duration: 0
         });
+      });
     }
     if (mailboxNotice) {
-        this.timer = window.setTimeout(() => {
-          _this.$notify({
-            title: '邮箱推送异常提醒',
-            message: mailboxNotice,
-            position: 'bottom-right',
-            type: 'warning',
-            duration: 0
-          });
+      this.timer = window.setTimeout(() => {
+        _this.$notify({
+          title: '邮箱推送异常提醒',
+          message: mailboxNotice,
+          position: 'bottom-right',
+          type: 'warning',
+          duration: 0
         });
+      });
     }
     if (wxOpenIdNotice) {
-        this.timer = window.setTimeout(() => {
-          _this.$notify({
-            title: '微小推送异常提醒',
-            message: wxOpenIdNotice,
-            position: 'bottom-right',
-            type: 'warning',
-            duration: 0
-          });
+      this.timer = window.setTimeout(() => {
+        _this.$notify({
+          title: '微小推送异常提醒',
+          message: wxOpenIdNotice,
+          position: 'bottom-right',
+          type: 'warning',
+          duration: 0
         });
+      });
     }
   },
   methods: {

@@ -29,6 +29,7 @@
                 prop="title">
               <el-table-column
                 prop="id">
+                <!-- eslint-disable-next-line -->
                 <template slot="header" slot-scope="scope">
                   <el-input
                     scope
@@ -161,6 +162,7 @@
             height="245px"
             cell-style="font-size: 14px">
             <el-table-column>
+              <!-- eslint-disable-next-line -->
               <template slot="header" slot-scope="scope">
                 <el-input
                   scope
@@ -263,19 +265,19 @@ export default {
     return {
       warehouse: '',
       finalShow: [], // 可附属门禁概览
-      finalShow3: [], //3侧边门禁总览
-      search: '', //input的值
-      search3: '', //input的值
+      finalShow3: [], // 3侧边门禁总览
+      search: '', // input的值
+      search3: '', // input的值
       guardtitle: '',
       guardlocation: '暂无位置信息',
       guardmac: '暂无mac',
       // location: '',
       parentId: '',
       guardId: '',
-      guardMenu: [], //3侧边门禁总览
+      guardMenu: [], // 3侧边门禁总览
       guardMenu1: [], // 可附属门禁概览
-      macMenu: [], //2mac概览
-      tableData: [], //已附属门禁列表
+      macMenu: [], // 2mac概览
+      tableData: [], // 已附属门禁列表
       dialogguards: false,
       dialogimportgate: false,
       dialogeditguard: false,
@@ -286,14 +288,14 @@ export default {
       formLabelWidth: '120px',
       gateway0: '', // 输入框1的值
       gateway1: '', // 输入框2的值
-      gateway2: '', // 输入框3的值
+      gateway2: '' // 输入框3的值
     };
   },
   created () {
     this.getguardData();
   },
   methods: {
-    getguardData() {
+    getguardData () {
       let _this = this;
       request.$get('/guard/guards', {}, (res) => {
         console.log(res.data.data);
@@ -309,7 +311,7 @@ export default {
       this.parentId = s;
       this.getguardInfo();
     },
-    getguardInfo() {
+    getguardInfo () {
       let _this = this;
       request.$get('/guard/guard', {
         guardId: _this.parentId
@@ -319,7 +321,7 @@ export default {
         let name = res.data.data.guard.name;
         let location = res.data.data.guard.location;
         let mac = res.data.data.guard.mac;
-        let warehouse =res.data.data.guard.warehouse;
+        let warehouse = res.data.data.guard.warehouse;
         _this.guardmac = mac;
         _this.guardlocation = location;
         _this.form3.location = location;
@@ -341,7 +343,7 @@ export default {
       this.getguardInfo();
       request.message(this, '刷新成功', 'success');
     },
-    changeStatus ($event){
+    changeStatus ($event) {
       let _this = this;
       console.log($event);
       _this.canUpdateWareHouse = $event;
@@ -362,7 +364,7 @@ export default {
     importgate () {
       let _this = this;
       _this.dialogimportgate = true
-      _this.$nextTick( () =>{
+      _this.$nextTick(() => {
         _this.$refs.lbj0.focus()
       })
     },
@@ -418,7 +420,7 @@ export default {
         setTimeout(function () {
           _this.guardtitle = _this.form3.name;
           _this.guardlocation = _this.form3.location;
-         _this.getguardData();
+          _this.getguardData();
           // _this.reload();
           request.message(_this, '门禁更新成功', 'success');
         }, 1000)
@@ -465,7 +467,7 @@ export default {
         });
       });
     },
-    handleSearch(val) {
+    handleSearch (val) {
       let search = val;
       if (search === '') {
         this.finalShow = this.guardMenu1;
@@ -477,7 +479,7 @@ export default {
         );
       }
     },
-    handleSearch3(val) {
+    handleSearch3 (val) {
       let search3 = val;
       if (search3 === '') {
         this.finalShow3 = this.guardMenu;
@@ -488,10 +490,10 @@ export default {
             !search3 || data.guardId.toString().includes(search3.toString()) || data.name.toLowerCase().includes(search3.toLowerCase())
         );
       }
-    },
+    }
   },
   watch: {
-    //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
     search (newVal) {
       this.handleSearch(newVal);
     },
@@ -503,13 +505,13 @@ export default {
     },
     'gateway0': {
       deep: true,
-      handler(newVal,oldVal){
-        if (newVal.length === 3){
-          this.$nextTick(() =>{
+      handler (newVal, oldVal) {
+        if (newVal.length === 3) {
+          this.$nextTick(() => {
             this.$refs.lbj1.focus()
           })
-        }else if (newVal.length === 0){
-          this.$nextTick(() =>{
+        } else if (newVal.length === 0) {
+          this.$nextTick(() => {
             this.$refs.lbj0.focus()
           })
         }
@@ -529,21 +531,21 @@ export default {
         }
       }
     },
-      'gateway2': {
-        deep: true,
-        handler (newVal, oldVal) {
-          if (newVal.length === 3){
-            this.$nextTick(() =>{
-              this.$refs.lbj2.focus()
-            })
-          }else if (newVal.length === 0) {
-            this.$nextTick(() => {
-              this.$refs.lbj1.focus()
-            })
-          }
+    'gateway2': {
+      deep: true,
+      handler (newVal, oldVal) {
+        if (newVal.length === 3) {
+          this.$nextTick(() => {
+            this.$refs.lbj2.focus()
+          })
+        } else if (newVal.length === 0) {
+          this.$nextTick(() => {
+            this.$refs.lbj1.focus()
+          })
         }
       }
     }
+  }
 }
 </script>
 

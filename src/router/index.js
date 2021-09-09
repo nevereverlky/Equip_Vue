@@ -5,7 +5,6 @@ import _this from '../main'
 
 // import Signin from '@/views/Signin.vue'
 import Index from '@/views/Index.vue'
-const Signin = () => import('../views/Signin.vue')
 // const Index = () => import('../views/Index.vue')
 
 import centerCart from '@/components/CenterManager/centerCart'
@@ -51,6 +50,7 @@ import formInbox from '@/components/EnterpriseManage/SafeManage/formInbox'
 import formDetail from '@/components/EnterpriseManage/SafeManage/formDetail'
 import equipInform from '@/components/EnterpriseManage/SafeManage/equipInform'
 import informDetail from '@/components/EnterpriseManage/SafeManage/informDetail'
+const Signin = () => import('../views/Signin.vue')
 // const formInbox = () => import('../components/EnterpriseManage/SafeManage/formInbox')
 // const formDetail = () => import('../components/EnterpriseManage/SafeManage/formDetail')
 // const equipInform = () => import('../components/EnterpriseManage/SafeManage/equipInform')
@@ -231,7 +231,7 @@ router.beforeEach((to, from, next) => {
         path: '/signin',
         query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
       })
-      request.message(_this,'请先登陆','warning')
+      request.message(_this, '请先登陆', 'warning')
     } else {
       next();
     }

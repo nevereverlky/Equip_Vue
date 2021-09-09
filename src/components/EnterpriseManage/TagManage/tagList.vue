@@ -56,6 +56,7 @@
             <el-table-column
               prop="action"
               width="200">
+              <!-- eslint-disable-next-line -->
               <template slot="header" slot-scope="scope">
                 <el-input
                   scope
@@ -145,6 +146,7 @@
             height="245px"
             cell-style="font-size: 14px">
             <el-table-column>
+              <!-- eslint-disable-next-line -->
               <template slot="header" slot-scope="scope">
                 <el-input
                   scope
@@ -173,140 +175,140 @@
 </template>
 
 <script>
-  import request from '../../../utils/request'
-  export default {
-    name: 'tagList',
-    inject: ['reload'],
-    data() {
-      return {
-        // finalShow: [], //标签总表
-        finalShow: [], //可绑定门禁总表
-        search_equipName: '', //input的值
-        search1: '', //input的值
-        tagData: [], //标签总表
-        guardMenu: [], //门禁总表
-        equipDetail: '',
-        tagId: '',
-        equipname: '',
-        currentPage: 1, // 当前页码
-        total: 20, // 总条数
-        tagData_length: 0, //总条目数
-        pageSize: 10, // 每页的数据条数
-        dialogEquip: false,
-        dialogGuard: false,
-        dialogPass: false,
-        formLabelWidth: '120px'
-      };
+import request from '../../../utils/request'
+export default {
+  name: 'tagList',
+  inject: ['reload'],
+  data () {
+    return {
+      // finalShow: [], //标签总表
+      finalShow: [], // 可绑定门禁总表
+      search_equipName: '', // input的值
+      search1: '', // input的值
+      tagData: [], // 标签总表
+      guardMenu: [], // 门禁总表
+      equipDetail: '',
+      tagId: '',
+      equipname: '',
+      currentPage: 1, // 当前页码
+      total: 20, // 总条数
+      tagData_length: 0, // 总条目数
+      pageSize: 10, // 每页的数据条数
+      dialogEquip: false,
+      dialogGuard: false,
+      dialogPass: false,
+      formLabelWidth: '120px'
+    };
+  },
+  created () {
+    this.gettagData();
+  },
+  methods: {
+    gettagData () {
+      let _this = this;
+      request.$get('/tag/tags', {
+        size: _this.pageSize,
+        fromIndex: _this.pageSize * (_this.currentPage - 1),
+        equipName: _this.search_equipName
+      }, (res) => {
+        console.log(res.data.data);
+        let counts = res.data.data.counts;
+        let tagData = res.data.data.tags;
+        _this.tagData = tagData;
+        // _this.finalShow = tagData;
+        _this.tagData_length = counts;
+      }, _this);
     },
-    created () {
+    getsearch (s) {
+      this.search1 = s
+    },
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
+      this.currentPage = 1;
+      this.pageSize = val;
       this.gettagData();
     },
-    methods: {
-      gettagData() {
-        let _this = this;
-        request.$get('/tag/tags', {
-          size: _this.pageSize,
-          fromIndex: _this.pageSize*(_this.currentPage-1),
-          equipName: _this.search_equipName
-        }, (res) => {
-          console.log(res.data.data);
-          let counts = res.data.data.counts;
-          let tagData = res.data.data.tags;
-          _this.tagData = tagData;
-          // _this.finalShow = tagData;
-          _this.tagData_length = counts;
-        }, _this);
-      },
-      getsearch (s) {
-        this.search1 = s
-      },
-      //每页条数改变时触发 选择一页显示多少行
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.currentPage = 1;
-        this.pageSize = val;
-        this.gettagData();
-      },
-      //当前页改变时触发 跳转其他页
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.currentPage = val;
-        this.gettagData();
-      },
-      getidtobind (row) {
-        this.tagId = row.tagId;
-        this.equipname = row.equipment.name;
-        let _this = this;
-        request.$get('/guard/guards/bindable', {
-          tagId: row.tagId
-        }, (res) => {
-          console.log(res.data.data);
-          let guardmenu = res.data.data;
-          _this.guardMenu = guardmenu;
-          _this.finalShow = guardmenu
-        }, _this);
-      },
-      bindit () {
-        let _this = this;
-        request.$post('/tag/guard/rebind', {
-          tagId: _this.tagId,
-          guardId: _this.search1
-        }, (res) => {
-          console.log(res.data);
-          _this.dialogGuard = false;
-          setTimeout(function () {
-            _this.gettagData();
-            // _this.reload();
-            request.message(_this, '标签重新绑定门禁成功', 'success');
-          }, 1000)
-        }, _this);
-      },
-      getidequip (row) {
-        let _this = this;
-        this.tagId = row;
-        request.$get('/tag/tag', {
-          tagId: row
-        }, (res) => {
-          console.log(res.data.data);
-          let equipdetail = res.data.data.equipment;
-          _this.equipDetail = equipdetail;
-        }, _this);
-      },
-      handleSearch(val) {
-        let _this = this;
-        let search = val;
-        this.search_equipName = search;
-        _this.currentPage = 1;
-        _this.gettagData();
-          // this.finalShow = this.tagData.filter(
-          //   (data) =>
-          //     !search || data.tagId.toString().includes(search.toString())
-          // );
-          // this.tagData_length = this.finalShow.length;
-      },
-      handleSearch1(val) {
-        let search1 = val;
-        if (search1 === '') {
-          this.finalShow = this.guardMenu;
-        }
-        if (search1 !== '') {
-          this.finalShow = this.guardMenu.filter(
-            (data) =>
-              !search1 || data.guardId.toString().includes(search1.toString()) || data.name.toLowerCase().includes(search1.toLowerCase())
-          );
-        }
-      },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.gettagData();
     },
-    watch: {
-      //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-      search_equipName(newVal) {
-        this.handleSearch(newVal);
-      },
-      search1(newVal) {
-        this.handleSearch1(newVal);
-      },
+    getidtobind (row) {
+      this.tagId = row.tagId;
+      this.equipname = row.equipment.name;
+      let _this = this;
+      request.$get('/guard/guards/bindable', {
+        tagId: row.tagId
+      }, (res) => {
+        console.log(res.data.data);
+        let guardmenu = res.data.data;
+        _this.guardMenu = guardmenu;
+        _this.finalShow = guardmenu
+      }, _this);
+    },
+    bindit () {
+      let _this = this;
+      request.$post('/tag/guard/rebind', {
+        tagId: _this.tagId,
+        guardId: _this.search1
+      }, (res) => {
+        console.log(res.data);
+        _this.dialogGuard = false;
+        setTimeout(function () {
+          _this.gettagData();
+          // _this.reload();
+          request.message(_this, '标签重新绑定门禁成功', 'success');
+        }, 1000)
+      }, _this);
+    },
+    getidequip (row) {
+      let _this = this;
+      this.tagId = row;
+      request.$get('/tag/tag', {
+        tagId: row
+      }, (res) => {
+        console.log(res.data.data);
+        let equipdetail = res.data.data.equipment;
+        _this.equipDetail = equipdetail;
+      }, _this);
+    },
+    handleSearch (val) {
+      let _this = this;
+      let search = val;
+      this.search_equipName = search;
+      _this.currentPage = 1;
+      _this.gettagData();
+      // this.finalShow = this.tagData.filter(
+      //   (data) =>
+      //     !search || data.tagId.toString().includes(search.toString())
+      // );
+      // this.tagData_length = this.finalShow.length;
+    },
+    handleSearch1 (val) {
+      let search1 = val;
+      if (search1 === '') {
+        this.finalShow = this.guardMenu;
+      }
+      if (search1 !== '') {
+        this.finalShow = this.guardMenu.filter(
+          (data) =>
+            !search1 || data.guardId.toString().includes(search1.toString()) || data.name.toLowerCase().includes(search1.toLowerCase())
+        );
+      }
+    }
+  },
+  watch: {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search_equipName (newVal) {
+      this.handleSearch(newVal);
+    },
+    search1 (newVal) {
+      this.handleSearch1(newVal);
     }
   }
+}
 </script>
 
 <style scoped>

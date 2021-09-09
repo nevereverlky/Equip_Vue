@@ -51,6 +51,7 @@
                         style="width: 100%"
                         cell-style="font-size: 13px">
                         <el-table-column>
+                          <!-- eslint-disable-next-line -->
                           <template slot="header" slot-scope="scope">
                             <div style="display: flex;flex-direction: row;justify-content: space-between">
                               <el-input
@@ -198,178 +199,178 @@
 </template>
 
 <script>
-  import request from '../../../utils/request'
-  // import eventBus from '../../../utils/eventBus'
-  export default {
-    name: 'formInbox',
-    inject: ['reload'],
-    data () {
-      return {
-        finalShow: [], //表单总表
-        search_all: true,
-        search_equipName: '',
-        search_location: '',
-        search_whenBegin: '',
-        search_whenEnd: '',
-        search_when: '',//[new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)]
-        typeMenu: '', //表单类型概览
-        formList: [], //表单总表
-        formId: '',
-        typeform: '',
-        currentPage: 1, // 当前页码
-        total: 20, // 总条数
-        formList_length: 0, //总条目数
-        pageSize: 10, // 每页的数据条数
-      }
+import request from '../../../utils/request'
+// import eventBus from '../../../utils/eventBus'
+export default {
+  name: 'formInbox',
+  inject: ['reload'],
+  data () {
+    return {
+      finalShow: [], // 表单总表
+      search_all: true,
+      search_equipName: '',
+      search_location: '',
+      search_whenBegin: '',
+      search_whenEnd: '',
+      search_when: '', // [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)]
+      typeMenu: '', // 表单类型概览
+      formList: [], // 表单总表
+      formId: '',
+      typeform: '',
+      currentPage: 1, // 当前页码
+      total: 20, // 总条数
+      formList_length: 0, // 总条目数
+      pageSize: 10 // 每页的数据条数
+    }
+  },
+  created () {
+    let _this = this;
+    request.$get('/securityForm/types/alarm', {}, (res) => {
+      console.log(res.data.data);
+      let typemenu = res.data.data;
+      _this.typeMenu = typemenu;
+    }, _this);
+  },
+  methods: {
+    gettype (e) {
+      console.log(e)
+      this.typeform = e;
+      this.getformData();
     },
-    created () {
-      let _this = this;
-      request.$get('/securityForm/types/alarm', {}, (res) => {
+    getformData () {
+      let _this = this
+      request.$get('/securityForm/forms/alarm', {
+        type: _this.typeform,
+        size: _this.pageSize,
+        fromIndex: _this.pageSize * (_this.currentPage - 1),
+        all: _this.search_all,
+        equipName: _this.search_equipName,
+        location: _this.search_location,
+        whenBegin: _this.search_whenBegin,
+        whenEnd: _this.search_whenEnd
+      }, (res) => {
         console.log(res.data.data);
-        let typemenu = res.data.data;
-        _this.typeMenu = typemenu;
+        let counts = res.data.data.counts;
+        let formlist = res.data.data.forms;
+        _this.formList = formlist;
+        // _this.finalShow = formlist;
+        _this.formList_length = counts;
       }, _this);
     },
-    methods: {
-      gettype (e) {
-        console.log(e)
-        this.typeform = e;
-        this.getformData();
-      },
-      getformData() {
-        let _this = this
-        request.$get('/securityForm/forms/alarm', {
-          type: _this.typeform,
-          size: _this.pageSize,
-          fromIndex: _this.pageSize*(_this.currentPage-1),
-          all: _this.search_all,
-          equipName: _this.search_equipName,
-          location: _this.search_location,
-          whenBegin: _this.search_whenBegin,
-          whenEnd: _this.search_whenEnd
-        }, (res) => {
-          console.log(res.data.data);
-          let counts = res.data.data.counts;
-          let formlist = res.data.data.forms;
-          _this.formList = formlist;
-          // _this.finalShow = formlist;
-          _this.formList_length = counts;
-        }, _this);
-      },
-      //每页条数改变时触发 选择一页显示多少行
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.currentPage = 1;
-        this.pageSize = val;
-        this.getformData();
-      },
-      //当前页改变时触发 跳转其他页
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.currentPage = val;
-        this.getformData();
-      },
-      getform (e) {
-        let _this = this
-        _this.formId = e
-        // setTimeout(()=>{
-        //   eventBus.$emit('formId',e);
-        //   eventBus.$emit('formtype',_this.typeform);
-        // },2000)
-        _this.$router.push({
-          path: '/formdetail',
-          name: 'formDetail',
-          query: {
-            formId: e,
-            formtype: _this.typeform
-          }
-        })
-      },
-      reset () {
-        this.search_all = true;
-        this.search_equipName = '';
-        this.search_location = '';
-        this.search_when = '';
-        this.search_whenBegin = '';
-        this.search_whenEnd = '';
-        this.getformData();
-        request.message(this, '重置成功', 'success');
-      },
-      handleSearch_equipName(val) {
-        let _this = this;
-        let search = val;
-        _this.search_equipName = search;
-        _this.currentPage = 1;
-        if (search === ''){
-          _this.search_all = true;
-        } else {
-          _this.search_all = false;
-        }
-        _this.getformData();
-      },
-      handleSearch_location(val) {
-        let _this = this;
-        let search = val;
-        _this.search_location = search;
-        _this.currentPage = 1;
-        if (search === ''){
-          _this.search_all = true;
-          console.log(_this.search_all)
-        } else {
-          _this.search_all = false;
-          console.log(_this.search_all)
-        }
-        _this.getformData();
-      },
-      formateTime (time) {
-        let times = new Date(time)
-        let year = times.getFullYear()
-        let month = times.getMonth() + 1 > 9 ? times.getMonth() + 1 : 0 + (times.getMonth() + 1)
-        let date= times.getDate() > 9 ? times.getDate() : 0 + times.getDate()
-        let hour = times.getHours() > 9 ? times.getHours() : 0 + times.getHours()
-        let minute = times.getMinutes() > 9 ? times.getMinutes() : 0 + times.getMinutes()
-        let second = times.getSeconds() > 9 ? times.getSeconds() : 0 + times.getMinutes()
-        return year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second
-      },
-      handleSearch_when(val){
-        let _this = this;
-        console.log(val)
-        if (val === null || val === ''){
-          _this.search_all = true;
-          _this.search_when = '';
-          _this.search_whenBegin = '';
-          _this.search_whenEnd = '';
-          console.log(_this.search_all)
-        }else {
-          let search1 = _this.formateTime(val[0]);
-          let search2 = _this.formateTime(val[1]);
-          console.log(search1)
-          console.log(search2)
-          _this.search_whenBegin = search1;
-          _this.search_whenEnd = search2;
-          _this.currentPage = 1;
-          if (search1 === '' && search2 === ''){
-            _this.search_all = true;
-          } else {
-            _this.search_all = false;
-          }
-        }
-        _this.getformData();
-      }
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`);
+      this.currentPage = 1;
+      this.pageSize = val;
+      this.getformData();
     },
-    watch: {
-      //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-      search_equipName (newVal) {
-        this.handleSearch_equipName(newVal);
-      },
-      search_location (newVal) {
-        this.handleSearch_location(newVal);
-      },
-      search_when (newVal) {
-        this.handleSearch_when(newVal);
-      },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getformData();
+    },
+    getform (e) {
+      let _this = this
+      _this.formId = e
+      // setTimeout(()=>{
+      //   eventBus.$emit('formId',e);
+      //   eventBus.$emit('formtype',_this.typeform);
+      // },2000)
+      _this.$router.push({
+        path: '/formdetail',
+        name: 'formDetail',
+        query: {
+          formId: e,
+          formtype: _this.typeform
+        }
+      })
+    },
+    reset () {
+      this.search_all = true;
+      this.search_equipName = '';
+      this.search_location = '';
+      this.search_when = '';
+      this.search_whenBegin = '';
+      this.search_whenEnd = '';
+      this.getformData();
+      request.message(this, '重置成功', 'success');
+    },
+    handleSearch_equipName (val) {
+      let _this = this;
+      let search = val;
+      _this.search_equipName = search;
+      _this.currentPage = 1;
+      if (search === '') {
+        _this.search_all = true;
+      } else {
+        _this.search_all = false;
+      }
+      _this.getformData();
+    },
+    handleSearch_location (val) {
+      let _this = this;
+      let search = val;
+      _this.search_location = search;
+      _this.currentPage = 1;
+      if (search === '') {
+        _this.search_all = true;
+        console.log(_this.search_all)
+      } else {
+        _this.search_all = false;
+        console.log(_this.search_all)
+      }
+      _this.getformData();
+    },
+    formateTime (time) {
+      let times = new Date(time)
+      let year = times.getFullYear()
+      let month = times.getMonth() + 1 > 9 ? times.getMonth() + 1 : 0 + (times.getMonth() + 1)
+      let date = times.getDate() > 9 ? times.getDate() : 0 + times.getDate()
+      let hour = times.getHours() > 9 ? times.getHours() : 0 + times.getHours()
+      let minute = times.getMinutes() > 9 ? times.getMinutes() : 0 + times.getMinutes()
+      let second = times.getSeconds() > 9 ? times.getSeconds() : 0 + times.getMinutes()
+      return year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second
+    },
+    handleSearch_when (val) {
+      let _this = this;
+      console.log(val)
+      if (val === null || val === '') {
+        _this.search_all = true;
+        _this.search_when = '';
+        _this.search_whenBegin = '';
+        _this.search_whenEnd = '';
+        console.log(_this.search_all)
+      } else {
+        let search1 = _this.formateTime(val[0]);
+        let search2 = _this.formateTime(val[1]);
+        console.log(search1)
+        console.log(search2)
+        _this.search_whenBegin = search1;
+        _this.search_whenEnd = search2;
+        _this.currentPage = 1;
+        if (search1 === '' && search2 === '') {
+          _this.search_all = true;
+        } else {
+          _this.search_all = false;
+        }
+      }
+      _this.getformData();
+    }
+  },
+  watch: {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search_equipName (newVal) {
+      this.handleSearch_equipName(newVal);
+    },
+    search_location (newVal) {
+      this.handleSearch_location(newVal);
+    },
+    search_when (newVal) {
+      this.handleSearch_when(newVal);
     }
   }
+}
 </script>
 
 <style scoped>

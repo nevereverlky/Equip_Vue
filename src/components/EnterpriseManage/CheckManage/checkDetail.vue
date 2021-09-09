@@ -177,7 +177,7 @@ import request from '../../../utils/request'
 export default {
   name: 'checkDetail',
   inject: ['reload'],
-  data() {
+  data () {
     return {
       equipRequestId: '',
       equipData: [],
@@ -194,7 +194,7 @@ export default {
     this.getData();
   },
   methods: {
-    getData() {
+    getData () {
       let _this = this;
       request.$get('/equipRequest/request', {
         equipRequestId: _this.equipRequestId
@@ -208,7 +208,7 @@ export default {
         _this.userData = userdata;
       }, _this);
     },
-    audit() {
+    audit () {
       let _this = this;
       console.log(_this.pass)
       request.$post('/equipRequest/audit', {
@@ -218,7 +218,7 @@ export default {
       }, (res) => {
         console.log(res.data.data);
         _this.getData();
-        request.message(_this,'提交成功','success');
+        request.message(_this, '提交成功', 'success');
       }, _this);
     }
   }

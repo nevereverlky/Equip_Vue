@@ -21,6 +21,7 @@
             style="width: 100%"
             cell-style="font-size: 13px">
             <el-table-column>
+              <!-- eslint-disable-next-line -->
               <template slot="header" slot-scope="scope">
                 <div style="display: flex;flex-direction: row;justify-content: space-between">
                 <el-input
@@ -222,7 +223,7 @@ import eventBus from '../../../utils/eventBus'
 export default {
   name: 'equipList',
   inject: ['reload'],
-  data() {
+  data () {
     return {
       // finalShow: [],
       equipData: [],
@@ -238,7 +239,7 @@ export default {
       search_toLendDateEnd: '',
       currentPage: 1, // 当前页码
       total: 20, // 总条数
-      equipData_length: 0, //总条目数
+      equipData_length: 0, // 总条目数
       pageSize: 10, // 每页的数据条数
       dialogFormVisible: false,
       equipform: {
@@ -256,11 +257,11 @@ export default {
     this.getequipData();
   },
   methods: {
-    getequipData() {
+    getequipData () {
       let _this = this;
       request.$get('/equipment/equipments', {
         size: _this.pageSize,
-        fromIndex: _this.pageSize*(_this.currentPage-1),
+        fromIndex: _this.pageSize * (_this.currentPage - 1),
         all: _this.search_all,
         name: _this.search_name,
         purchaseDateBegin: _this.search_purchaseDateBegin,
@@ -277,32 +278,32 @@ export default {
         _this.equipData_length = counts;
       }, _this);
     },
-    //每页条数改变时触发 选择一页显示多少行
-    handleSizeChange(val) {
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChange (val) {
       console.log(`每页 ${val} 条`);
       this.currentPage = 1;
       this.pageSize = val;
       this.getequipData();
     },
-    //当前页改变时触发 跳转其他页
-    handleCurrentChange(val) {
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChange (val) {
       console.log(`当前页: ${val}`);
       this.currentPage = val;
       this.getequipData();
     },
-    getid (e){
+    getid (e) {
       this.equipId = e;
-      let _this=this;
+      let _this = this;
       request.$get('/equipment/equipment', {
         equipId: e
       }, (res) => {
-          console.log(res.data.data);
-          let equipform = res.data.data;
-          _this.equipform = equipform;
-       }, _this);
+        console.log(res.data.data);
+        let equipform = res.data.data;
+        _this.equipform = equipform;
+      }, _this);
     },
     editequip () {
-      let _this=this;
+      let _this = this;
       // let allowPermanentLend = _this.search_allowPermanentLend;
       // if (allowPermanentLend === '' || allowPermanentLend === false){
       //   allowPermanentLend = false;
@@ -352,12 +353,12 @@ export default {
       this.getequipData();
       request.message(this, '重置成功', 'success');
     },
-    handleSearch_name(val) {
+    handleSearch_name (val) {
       let _this = this;
       let search = val;
       _this.search_name = search;
       _this.currentPage = 1;
-      if (search === ''){
+      if (search === '') {
         _this.search_all = true;
       } else {
         _this.search_all = false;
@@ -368,22 +369,22 @@ export default {
       let times = new Date(time)
       let year = times.getFullYear()
       let month = times.getMonth() + 1 > 9 ? times.getMonth() + 1 : 0 + (times.getMonth() + 1)
-      let date= times.getDate() > 9 ? times.getDate() : 0 + times.getDate()
+      let date = times.getDate() > 9 ? times.getDate() : 0 + times.getDate()
       let hour = times.getHours() > 9 ? times.getHours() : 0 + times.getHours()
       let minute = times.getMinutes() > 9 ? times.getMinutes() : 0 + times.getMinutes()
       let second = times.getSeconds() > 9 ? times.getSeconds() : 0 + times.getMinutes()
       return year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second
     },
-    handleSearch_purchaseDate(val) {
+    handleSearch_purchaseDate (val) {
       let _this = this;
       console.log(val)
-      if (val === null || val === ''){
+      if (val === null || val === '') {
         _this.search_all = true;
         _this.search_purchaseDate = '';
         _this.search_purchaseDateBegin = '';
         _this.search_purchaseDateEnd = '';
         console.log(_this.search_all)
-      }else {
+      } else {
         let search1 = _this.formateTime(val[0]);
         let search2 = _this.formateTime(val[1]);
         console.log(search1)
@@ -391,7 +392,7 @@ export default {
         _this.search_purchaseDateBegin = search1;
         _this.search_purchaseDateEnd = search2;
         _this.currentPage = 1;
-        if (search1 === '' && search2 === ''){
+        if (search1 === '' && search2 === '') {
           _this.search_all = true;
         } else {
           _this.search_all = false;
@@ -399,20 +400,20 @@ export default {
       }
       _this.getequipData();
     },
-    handleSearch_allowPermanentLend(val) {
+    handleSearch_allowPermanentLend (val) {
       let _this = this;
       console.log(val)
       let search = val;
       _this.search_allowPermanentLend = search;
       _this.currentPage = 1;
-      if (search === ''){
+      if (search === '') {
         _this.search_all = true;
       } else {
         _this.search_all = false;
       }
       request.$get('/equipment/equipments', {
         size: _this.pageSize,
-        fromIndex: _this.pageSize*(_this.currentPage-1),
+        fromIndex: _this.pageSize * (_this.currentPage - 1),
         all: _this.search_all,
         name: _this.search_name,
         purchaseDateBegin: _this.search_purchaseDateBegin,
@@ -429,16 +430,16 @@ export default {
         _this.equipData_length = counts;
       }, _this);
     },
-    handleSearch_LendDate(val) {
+    handleSearch_LendDate (val) {
       let _this = this;
       console.log(val)
-      if (val === null || val === ''){
+      if (val === null || val === '') {
         _this.search_all = true;
         _this.search_LendDate = '';
         _this.search_fromLendDateBegin = '';
         _this.search_toLendDateEnd = '';
         console.log(_this.search_all)
-      }else {
+      } else {
         let search1 = _this.formateTime(val[0]);
         let search2 = _this.formateTime(val[1]);
         console.log(search1)
@@ -453,22 +454,22 @@ export default {
         }
       }
       _this.getequipData();
-    },
+    }
   },
   watch: {
-    //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-    search_name(newVal) {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search_name (newVal) {
       this.handleSearch_name(newVal);
     },
-    search_purchaseDate(newVal) {
+    search_purchaseDate (newVal) {
       this.handleSearch_purchaseDate(newVal);
     },
-    search_allowPermanentLend(newVal) {
+    search_allowPermanentLend (newVal) {
       this.handleSearch_allowPermanentLend(newVal);
     },
-    search_LendDate(newVal) {
+    search_LendDate (newVal) {
       this.handleSearch_LendDate(newVal);
-    },
+    }
   }
 }
 </script>

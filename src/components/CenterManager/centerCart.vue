@@ -279,178 +279,177 @@
 </template>
 
 <script>
-  import request from '../../utils/request'
-  export default {
-    name: 'centerCart',
-    inject: ['reload'],
-    data() {
-      return{
-        typeMenu: '',
-        roleMenu: '',
-        equipData: [
-          {
-            equipId: '1017',
-            name: '智能设备-553443'
-          },{
-            equipId: '1039',
-            name: '智能设备-875591'
-          }
-        ],
-        equipData1: [
-          {
-            equipId: '1039',
-            name: '智能设备-875591',
-            LendDate: '2021/4/23 20:46:20',
-            allowPermanentLend: '否'
-          }
-        ]
-      }
-    },
-    mounted() {
-      this.getData();
-    },
-    methods: {
-      getData() {
-        let _this = this;
-        request.$get('/securityForm/types/alarm', {}, (res) => {
-          console.log(res.data.data);
-          let typemenu = res.data.data;
-          _this.typeMenu = typemenu;
-          _this.getadd_impressions_frequency_reach();
-        }, _this);
-        request.$get('/role/roles/valid', {}, (res) => {
-          console.log(res.data.data);
-          let role = res.data.data.map((item) => {
-            let data = item.name
-            return data;
-          });
-          _this.roleMenu = role;
-          _this.getroleCart();
-        }, _this);
-      },
-      getroleCart() {
-        let _this = this
-        let ctx = document.getElementById("impressions-add").getContext('2d');
-        let myChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: _this.roleMenu,//每个角色的名称
-            datasets: [{
-              backgroundColor: [
-                'rgb(59, 89, 152)',
-                'rgba(59, 89, 152, 0.80)',
-                'rgba(59, 89, 152, 0.60)',
-                'rgba(59, 89, 152, 0.40)',
-                'rgba(59, 89, 152, 0.30)',
-                'rgba(59, 89, 152, 0.10)'
-              ],
-              hoverBackgroundColor: [
-                'rgb(59, 89, 152)',
-                'rgba(59, 89, 152, 0.80)',
-                'rgba(59, 89, 152, 0.60)',
-                'rgba(59, 89, 152, 0.40)',
-                'rgba(59, 89, 152, 0.30)',
-                'rgba(59, 89, 152, 0.10)'
-              ],
-              data: [178, 178, 178],//每个角色的数据
-              borderWidth: [1, 1, 1, 1, 1]
-            }]
-          },
-          options: {
-            cutoutPercentage: 65,
-            legend: {
-              position: 'right',
-              display: true,
-              labels: {
-                boxWidth:40
-              }
-            },
-            tooltips: {
-              displayColors:false,
-            }
-          }
+import request from '../../utils/request'
+export default {
+  name: 'centerCart',
+  inject: ['reload'],
+  data () {
+    return {
+      typeMenu: '',
+      roleMenu: '',
+      equipData: [
+        {
+          equipId: '1017',
+          name: '智能设备-553443'
+        }, {
+          equipId: '1039',
+          name: '智能设备-875591'
+        }
+      ],
+      equipData1: [
+        {
+          equipId: '1039',
+          name: '智能设备-875591',
+          LendDate: '2021/4/23 20:46:20',
+          allowPermanentLend: '否'
+        }
+      ]
+    }
+  },
+  mounted () {
+    this.getData();
+  },
+  methods: {
+    getData () {
+      let _this = this;
+      request.$get('/securityForm/types/alarm', {}, (res) => {
+        console.log(res.data.data);
+        let typemenu = res.data.data;
+        _this.typeMenu = typemenu;
+        _this.getadd_impressions_frequency_reach();
+      }, _this);
+      request.$get('/role/roles/valid', {}, (res) => {
+        console.log(res.data.data);
+        let role = res.data.data.map((item) => {
+          let data = item.name
+          return data;
         });
-      },
-      getadd_impressions_frequency_reach() {
-        // chart 1
-
-        var ctx = document.getElementById('add-impressions-frequency-reach').getContext('2d');
-
-        var myChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", 'Aug', 'Sept' ,'Oct', 'Nov', 'Dec'],
-            datasets: [{
-              label: '设备通行数',
-              data: [25, 23, 27, 15, 27, 23, 31, 41, 25, 23, 15, 27],
-              backgroundColor: 'rgba(59, 89, 152, 0.55)',
-              borderColor: "transparent",
-              borderWidth: 3
-            },{
-              label: '设备借记数',
-              data: [20, 18, 21, 10, 21, 18, 26, 36, 20, 18, 21, 10],
-              backgroundColor: 'rgba(54, 241, 205, 0.55)',
-              borderColor: "transparent",
-              borderWidth: 3
-            }, {
-              label: '频率',
-              type: 'line',
-              data: [10, 8, 12, 5, 12, 8, 16, 25, 10, 8, 12, 5],
-              backgroundColor: "rgba(59, 89, 152, 0.35)",
-              borderColor: "#3b5998",
-              pointBackgroundColor:'transparent',
-              pointHoverBackgroundColor:'transparent',
-              pointBorderWidth :0,
-              pointRadius :0,
-              pointHoverRadius :0,
-              borderWidth: 2
-
-            }]
-          },
-          options: {
-            legend: {
-              display: true,
-              labels: {
-                fontColor: '#585757',
-                boxWidth:40
-              }
-            },
-            tooltips: {
-              displayColors:false
-            },
-            scales: {
-              xAxes: [{
-                barPercentage: .4,
-                ticks: {
-                  beginAtZero:true,
-                  fontColor: '#585757'
-                },
-                gridLines: {
-                  display: true ,
-                  color: "rgba(0, 0, 0, 0.05)"
-                },
-              }],
-              yAxes: [{
-                ticks: {
-                  beginAtZero:true,
-                  fontColor: '#585757'
-                },
-                gridLines: {
-                  display: true ,
-                  color: "rgba(0, 0, 0, 0.05)"
-                },
-              }]
+        _this.roleMenu = role;
+        _this.getroleCart();
+      }, _this);
+    },
+    getroleCart () {
+      let _this = this
+      let ctx = document.getElementById("impressions-add").getContext('2d');
+      let myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: _this.roleMenu, // 每个角色的名称
+          datasets: [{
+            backgroundColor: [
+              'rgb(59, 89, 152)',
+              'rgba(59, 89, 152, 0.80)',
+              'rgba(59, 89, 152, 0.60)',
+              'rgba(59, 89, 152, 0.40)',
+              'rgba(59, 89, 152, 0.30)',
+              'rgba(59, 89, 152, 0.10)'
+            ],
+            hoverBackgroundColor: [
+              'rgb(59, 89, 152)',
+              'rgba(59, 89, 152, 0.80)',
+              'rgba(59, 89, 152, 0.60)',
+              'rgba(59, 89, 152, 0.40)',
+              'rgba(59, 89, 152, 0.30)',
+              'rgba(59, 89, 152, 0.10)'
+            ],
+            data: [178, 178, 178], // 每个角色的数据
+            borderWidth: [1, 1, 1, 1, 1]
+          }]
+        },
+        options: {
+          cutoutPercentage: 65,
+          legend: {
+            position: 'right',
+            display: true,
+            labels: {
+              boxWidth: 40
             }
-
+          },
+          tooltips: {
+            displayColors: false
           }
-        });
-      }
+        }
+      });
+    },
+    getadd_impressions_frequency_reach () {
+      // chart 1
+
+      var ctx = document.getElementById('add-impressions-frequency-reach').getContext('2d');
+
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: '设备通行数',
+            data: [25, 23, 27, 15, 27, 23, 31, 41, 25, 23, 15, 27],
+            backgroundColor: 'rgba(59, 89, 152, 0.55)',
+            borderColor: "transparent",
+            borderWidth: 3
+          }, {
+            label: '设备借记数',
+            data: [20, 18, 21, 10, 21, 18, 26, 36, 20, 18, 21, 10],
+            backgroundColor: 'rgba(54, 241, 205, 0.55)',
+            borderColor: "transparent",
+            borderWidth: 3
+          }, {
+            label: '频率',
+            type: 'line',
+            data: [10, 8, 12, 5, 12, 8, 16, 25, 10, 8, 12, 5],
+            backgroundColor: "rgba(59, 89, 152, 0.35)",
+            borderColor: "#3b5998",
+            pointBackgroundColor: 'transparent',
+            pointHoverBackgroundColor: 'transparent',
+            pointBorderWidth: 0,
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            borderWidth: 2
+
+          }]
+        },
+        options: {
+          legend: {
+            display: true,
+            labels: {
+              fontColor: '#585757',
+              boxWidth: 40
+            }
+          },
+          tooltips: {
+            displayColors: false
+          },
+          scales: {
+            xAxes: [{
+              barPercentage: 0.4,
+              ticks: {
+                beginAtZero: true,
+                fontColor: '#585757'
+              },
+              gridLines: {
+                display: true,
+                color: "rgba(0, 0, 0, 0.05)"
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                fontColor: '#585757'
+              },
+              gridLines: {
+                display: true,
+                color: "rgba(0, 0, 0, 0.05)"
+              }
+            }]
+          }
+
+        }
+      });
     }
   }
+}
 
 </script>
 
 <style scoped>
 
 </style>
-

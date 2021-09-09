@@ -165,47 +165,47 @@
 </template>
 
 <script>
-  import request from '../../../utils/request'
-  export default {
-    name: 'informDetail',
-    inject: ['reload'],
-    data() {
-      return {
-        equipInformId: '',
-        equipData: [],
-        formData: '',
-        executor: '',
-        lender:'',
-        warehouse: ''
-      }
-    },
-    created () {
+import request from '../../../utils/request'
+export default {
+  name: 'informDetail',
+  inject: ['reload'],
+  data () {
+    return {
+      equipInformId: '',
+      equipData: [],
+      formData: '',
+      executor: '',
+      lender: '',
+      warehouse: ''
+    }
+  },
+  created () {
+    let _this = this;
+    let equipinformId = this.$route.query.equipInformId;
+    _this.equipInformId = equipinformId;
+    this.getData();
+  },
+  methods: {
+    getData () {
       let _this = this;
-      let equipinformId = this.$route.query.equipInformId;
-      _this.equipInformId = equipinformId;
-      this.getData();
-    },
-    methods: {
-      getData() {
-        let _this = this;
-        request.$get('/securityForm/form/equipInform', {
-          equipInformId: _this.equipInformId
-        }, (res) => {
-          console.log(res.data.data);
-          let equipdata = res.data.data.equips;
-          let formdata = res.data.data;
-          let executor = res.data.data.executor;
-          let lender = res.data.data.lender;
-          let warehouse = res.data.data.warehouse;
-          _this.warehouse = warehouse;
-          _this.lender = lender;
-          _this.executor = executor;
-          _this.formData = formdata;
-          _this.equipData = equipdata;
-        }, _this);
-      }
+      request.$get('/securityForm/form/equipInform', {
+        equipInformId: _this.equipInformId
+      }, (res) => {
+        console.log(res.data.data);
+        let equipdata = res.data.data.equips;
+        let formdata = res.data.data;
+        let executor = res.data.data.executor;
+        let lender = res.data.data.lender;
+        let warehouse = res.data.data.warehouse;
+        _this.warehouse = warehouse;
+        _this.lender = lender;
+        _this.executor = executor;
+        _this.formData = formdata;
+        _this.equipData = equipdata;
+      }, _this);
     }
   }
+}
 </script>
 
 <style scoped>

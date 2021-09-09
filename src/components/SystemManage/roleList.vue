@@ -27,6 +27,7 @@
               :header-cell-style="{color: 'black', fontSize: '14px'}">
               <el-table-column
                 prop="id">
+                <!-- eslint-disable-next-line -->
                 <template slot="header" slot-scope="scope">
                   <el-input
                     scope
@@ -84,6 +85,7 @@
                   label="已继承角色列表">
                   <el-table-column
                     prop="id">
+                    <!-- eslint-disable-next-line -->
                     <template slot="header" slot-scope="scope">
                       <el-input
                         scope
@@ -111,6 +113,7 @@
                   label="可继承角色概览">
                   <el-table-column
                     prop="id">
+                    <!-- eslint-disable-next-line -->
                     <template slot="header" slot-scope="scope">
                       <el-input
                         scope
@@ -172,336 +175,336 @@
 </template>
 
 <script>
-  import request from '../../utils/request'
-  export default {
-    name: 'roleList',
-    inject: ['reload'],
-    data () {
-      return {
-        alarm: 'false', //是否允许警报
-        finalShow: [],  // 可继承角色概览
-        finalShow3: [], //3侧边角色总览
-        finalShow4: [], //4已继承角色列表
-        search: '',
-        search3: '',
-        search4: '',
-        roletitle: '',
-        parentId: '',
-        roleId: '',
-        roleMenu: [], //3侧边角色总览
-        roleMenu1: [], // 可继承角色概览
-        subList: [], //4已继承角色列表
-        dialogroles: false,
-        dialogaddrole: false,
-        dialogeditrole: false,
-        form1:{
-          name: ''
-        },
-        form2:{
-          name: ''
-        },
-        formLabelWidth: '100px'
-      };
+import request from '../../utils/request'
+export default {
+  name: 'roleList',
+  inject: ['reload'],
+  data () {
+    return {
+      alarm: 'false', // 是否允许警报
+      finalShow: [], // 可继承角色概览
+      finalShow3: [], // 3侧边角色总览
+      finalShow4: [], // 4已继承角色列表
+      search: '',
+      search3: '',
+      search4: '',
+      roletitle: '',
+      parentId: '',
+      roleId: '',
+      roleMenu: [], // 3侧边角色总览
+      roleMenu1: [], // 可继承角色概览
+      subList: [], // 4已继承角色列表
+      dialogroles: false,
+      dialogaddrole: false,
+      dialogeditrole: false,
+      form1: {
+        name: ''
+      },
+      form2: {
+        name: ''
+      },
+      formLabelWidth: '100px'
+    };
+  },
+  created () {
+    this.getroleData();
+  },
+  methods: {
+    getroleData () {
+      let _this = this;
+      // 左侧角色列表
+      request.$get('/role/roles/valid', {}, (res) => {
+        console.log(res.data.data);
+        let rolemenu = res.data.data;
+        _this.roleMenu = rolemenu;
+        _this.finalShow3 = rolemenu
+      }, _this);
     },
-    created () {
-      this.getroleData();
+    // 指定一个key标识这一行的数据
+    getRowKey (row) {
+      return row.id // id为row的data属性之一，必须唯一且与tableData中保持一致
     },
-    methods: {
-      getroleData() {
-        let _this = this;
-        //左侧角色列表
-        request.$get('/role/roles/valid', {}, (res) => {
-          console.log(res.data.data);
-          let rolemenu = res.data.data;
-          _this.roleMenu = rolemenu;
-          _this.finalShow3 = rolemenu
-        }, _this);
-      },
-      // 指定一个key标识这一行的数据
-      getRowKey (row) {
-        return row.id //id为row的data属性之一，必须唯一且与tableData中保持一致
-      },
-      getchild (s) {
-        this.parentId = s;
-        this.getchildData();
-      },
-      getchildData() {
-        let _this = this;
-        this.search = '';
-        this.search4 = '';
-        request.$get('/role/role', {
+    getchild (s) {
+      this.parentId = s;
+      this.getchildData();
+    },
+    getchildData () {
+      let _this = this;
+      this.search = '';
+      this.search4 = '';
+      request.$get('/role/role', {
+        roleId: _this.parentId
+      }, (res) => {
+        console.log(res.data.data);
+        // let tabledata = res.data.data.authorities;
+        let sublist = res.data.data.sublist;
+        let name = res.data.data.name;
+        let alarm = res.data.data.alarm;
+        console.log(sublist)
+        _this.subList = sublist;
+        _this.finalShow4 = sublist
+        _this.roletitle = name;
+        _this.form2.name = name;
+        _this.alarm = alarm;
+        // _this.tableData = tabledata;
+        // _this.finalShow1 = tabledata
+      }, _this);
+      request.$get('/role/roles/extendable', {
+        roleId: _this.parentId
+      }, (res) => {
+        console.log(res.data.data);
+        let rolemenu = res.data.data;
+        _this.roleMenu1 = rolemenu;
+        _this.finalShow = rolemenu;
+      }, _this);
+    },
+    changeStatus ($event) {
+      let _this = this;
+      console.log($event)
+      request.$post('/role/alarm/update', {
+        roleId: _this.parentId,
+        alarm: $event
+      }, (res) => {
+        console.log(res.data);
+        let message = res.data.message;
+        setTimeout(function () {
+          // _this.reload();
+          request.message(_this, message, 'success');
+        }, 1000)
+      }, _this)
+    },
+    fresh () {
+      this.getchildData();
+      request.message(this, '刷新成功', 'success');
+    },
+    addrole () {
+      let _this = this;
+      request.$post('/role/add', {
+        name: _this.form1.name
+      }, (res) => {
+        console.log(res.data);
+        _this.dialogaddrole = false;
+        setTimeout(function () {
+          _this.reload();
+          request.message(_this, '角色添加成功', 'success');
+        }, 1000)
+      }, _this)
+    },
+    removerole () {
+      let _this = this;
+      this.$confirm('此操作将删除该角色，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        request.$post('/role/delete', {
           roleId: _this.parentId
-        }, (res) => {
-          console.log(res.data.data);
-          // let tabledata = res.data.data.authorities;
-          let sublist = res.data.data.sublist;
-          let name = res.data.data.name;
-          let alarm = res.data.data.alarm;
-          console.log(sublist)
-          _this.subList = sublist;
-          _this.finalShow4 = sublist
-          _this.roletitle = name;
-          _this.form2.name = name;
-          _this.alarm = alarm;
-          // _this.tableData = tabledata;
-          // _this.finalShow1 = tabledata
-        }, _this);
-        request.$get('/role/roles/extendable', {
-          roleId: _this.parentId
-        }, (res) => {
-          console.log(res.data.data);
-          let rolemenu = res.data.data;
-          _this.roleMenu1 = rolemenu;
-          _this.finalShow = rolemenu;
-        }, _this);
-      },
-      changeStatus ($event){
-        let _this = this;
-        console.log($event)
-        request.$post('/role/alarm/update', {
-          roleId: _this.parentId,
-          alarm: $event
         }, (res) => {
           console.log(res.data);
-          let message = res.data.message;
           setTimeout(function () {
-            // _this.reload();
-            request.message(_this, message, 'success');
+            _this.reload();
+            request.message(_this, '角色删除成功', 'success');
           }, 1000)
         }, _this)
-      },
-      fresh () {
-        this.getchildData();
-        request.message(this, '刷新成功', 'success');
-      },
-      addrole () {
-        let _this = this;
-        request.$post('/role/add', {
-            name: _this.form1.name
-          }, (res) => {
-            console.log(res.data);
-            _this.dialogaddrole = false;
-            setTimeout(function () {
-              _this.reload();
-              request.message(_this, '角色添加成功', 'success');
-            }, 1000)
-          }, _this)
-      },
-      removerole () {
-        let _this = this;
-        this.$confirm('此操作将删除该角色，是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          request.$post('/role/delete', {
-            roleId: _this.parentId
-          }, (res) => {
-            console.log(res.data);
-            setTimeout(function () {
-              _this.reload();
-              request.message(_this, '角色删除成功', 'success');
-            }, 1000)
-          }, _this)
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         });
-      },
-      editrole () {
-        let _this = this
-        request.$post('/role/update', {
-          name: _this.form2.name,
-          roleId: _this.parentId
-        }, (res) => {
-          console.log(res.data);
-          _this.dialogeditrole = false;
-          setTimeout(function () {
-            _this.roletitle = _this.form2.name;
-            _this.getroleData();
-            // _this.reload();
-            request.message(_this, '角色更新成功', 'success');
-          }, 1000)
-        }, _this)
-      },
-      roleadd (e) {
-        let _this = this
-        this.roleId = e;
-        request.$post('/role/extend', {
-          roleId: e,
-          parentId: _this.parentId
+      });
+    },
+    editrole () {
+      let _this = this
+      request.$post('/role/update', {
+        name: _this.form2.name,
+        roleId: _this.parentId
+      }, (res) => {
+        console.log(res.data);
+        _this.dialogeditrole = false;
+        setTimeout(function () {
+          _this.roletitle = _this.form2.name;
+          _this.getroleData();
+          // _this.reload();
+          request.message(_this, '角色更新成功', 'success');
+        }, 1000)
+      }, _this)
+    },
+    roleadd (e) {
+      let _this = this
+      this.roleId = e;
+      request.$post('/role/extend', {
+        roleId: e,
+        parentId: _this.parentId
+      }, (res) => {
+        console.log(res.data);
+        setTimeout(function () {
+          _this.getchildData();
+          // _this.reload();
+          request.message(_this, '继承角色添加成功', 'success');
+        }, 1000)
+      }, _this)
+    },
+    roleremove (e) {
+      let _this = this;
+      this.roleId = e;
+      this.$confirm('此操作将删除该继承角色, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        request.$post('/role/disinherit', {
+          parentId: _this.parentId,
+          roleId: e
         }, (res) => {
           console.log(res.data);
           setTimeout(function () {
             _this.getchildData();
             // _this.reload();
-            request.message(_this, '继承角色添加成功', 'success');
+            request.message(_this, '继承角色删除成功', 'success');
           }, 1000)
         }, _this)
-      },
-      roleremove (e) {
-        let _this = this;
-        this.roleId = e;
-        this.$confirm('此操作将删除该继承角色, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          request.$post('/role/disinherit', {
-            parentId: _this.parentId,
-            roleId: e
-          }, (res) => {
-            console.log(res.data);
-            setTimeout(function () {
-              _this.getchildData();
-              // _this.reload();
-              request.message(_this, '继承角色删除成功', 'success');
-            }, 1000)
-          }, _this)
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         });
-      },
-      // handleSelectionChange(val) {
-      //   this.multipleSelection = val;
-      //   this.batchPassArr = [] //每次点击需清空原本数组的内容
-      //   this.multipleSelection.map(item => { //遍历数组，把id存进自定义的数组里
-      //     this.batchPassArr.push(item.id)
-      //   })
-      //   this.batchPassArr = this.batchPassArr.join(',')
-      //   console.log(this.batchPassArr)
-      // },
-      // handleSelectionChange2(val) {
-      //   this.multipleSelection2 = val;
-      //   this.batchPassArr2 = [] //每次点击需清空原本数组的内容
-      //   this.multipleSelection2.map(item => { //遍历数组，把id存进自定义的数组里
-      //     this.batchPassArr2.push(item.id)
-      //   })
-      //   this.batchPassArr2 = this.batchPassArr2.join(',')
-      //   console.log(this.batchPassArr2)
-      // },
-      // bindit () {
-      //   let _this = this;
-      //   request.$post('/role/auths/bind', {
-      //     authIds: _this.batchPassArr2,
-      //     roleId: _this.parentId
-      //   }, (res) => {
-      //     console.log(res.data);
-      //     setTimeout(function () {
-      //       _this.reload();
-      //       request.message(_this, '绑定权限成功', 'success');
-      //     }, 1000)
-      //   }, _this)
-      // },
-      // unbindit () {
-      //   let _this = this;
-      //   this.$confirm('此操作将批量解绑所选权限, 是否继续?', '提示', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     request.$post('/role/auths/unbind', {
-      //       authIds: _this.batchPassArr,
-      //       roleId: _this.parentId
-      //     }, (res) => {
-      //       console.log(res.data);
-      //       setTimeout(function () {
-      //         _this.reload();
-      //         request.message(_this, '权限解绑成功', 'success');
-      //       }, 1000)
-      //     }, _this)
-      //   }).catch(() => {
-      //     this.$message({
-      //       type: 'info',
-      //       message: '已取消解绑'
-      //     });
-      //   });
-      // },
-      handleSearch(val) {
-        let search = val;
-        if (search === '') {
-          this.finalShow = this.roleMenu1;
-        }
-        if (search !== '') {
-          this.finalShow = this.roleMenu1.filter(
-            (data) =>
-              !search || data.roleId.toString().includes(search.toString()) || data.name.toLowerCase().includes(search.toLowerCase())
-          );
-        }
-      },
-      // handleSearch1(val) {
-      //   let search1 = val;
-      //   if (search1 === '') {
-      //     this.finalShow1 = this.tableData;
-      //   }
-      //   if (search1 !== '') {
-      //     this.finalShow1 = this.tableData.filter(
-      //       (data) =>
-      //         !search1 || data.id.toString().includes(search1.toString()) || data.name.toLowerCase().includes(search1.toLowerCase())
-      //     );
-      //   }
-      // },
-      // handleSearch2(val) {
-      //   let search2 = val;
-      //   if (search2 === '') {
-      //     this.finalShow2 = this.tableDataAll;
-      //   }
-      //   if (search2 !== '') {
-      //     this.finalShow2 = this.tableDataAll.filter(
-      //       (data) =>
-      //         !search2 || data.id.toString().includes(search2.toString()) || data.name.toLowerCase().includes(search2.toLowerCase())
-      //     );
-      //   }
-      // },
-      handleSearch3(val) {
-        let search3 = val;
-        if (search3 === '') {
-          this.finalShow3 = this.roleMenu;
-        }
-        if (search3 !== '') {
-          this.finalShow3 = this.roleMenu.filter(
-            (data) =>
-              !search3 || data.roleId.toString().includes(search3.toString()) || data.name.toLowerCase().includes(search3.toLowerCase())
-          );
-        }
-      },
-      handleSearch4(val) {
-        let search4 = val;
-        if (search4 === '') {
-          this.finalShow4 = this.subList;
-        }
-        if (search4 !== '') {
-          this.finalShow4 = this.subList.filter(
-            (data) =>
-              !search4 || data.roleId.toString().includes(search4.toString()) || data.name.toLowerCase().includes(search4.toLowerCase())
-          );
-        }
-      },
+      });
     },
-    watch: {
-      //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-      search(newVal) {
-        this.handleSearch(newVal);
-      },
-      // search1(newVal) {
-      //   this.handleSearch1(newVal);
-      // },
-      // search2(newVal) {
-      //   this.handleSearch2(newVal);
-      // },
-      search3(newVal) {
-        this.handleSearch3(newVal);
-      },
-      search4(newVal) {
-        this.handleSearch4(newVal);
-      },
+    // handleSelectionChange(val) {
+    //   this.multipleSelection = val;
+    //   this.batchPassArr = [] //每次点击需清空原本数组的内容
+    //   this.multipleSelection.map(item => { //遍历数组，把id存进自定义的数组里
+    //     this.batchPassArr.push(item.id)
+    //   })
+    //   this.batchPassArr = this.batchPassArr.join(',')
+    //   console.log(this.batchPassArr)
+    // },
+    // handleSelectionChange2(val) {
+    //   this.multipleSelection2 = val;
+    //   this.batchPassArr2 = [] //每次点击需清空原本数组的内容
+    //   this.multipleSelection2.map(item => { //遍历数组，把id存进自定义的数组里
+    //     this.batchPassArr2.push(item.id)
+    //   })
+    //   this.batchPassArr2 = this.batchPassArr2.join(',')
+    //   console.log(this.batchPassArr2)
+    // },
+    // bindit () {
+    //   let _this = this;
+    //   request.$post('/role/auths/bind', {
+    //     authIds: _this.batchPassArr2,
+    //     roleId: _this.parentId
+    //   }, (res) => {
+    //     console.log(res.data);
+    //     setTimeout(function () {
+    //       _this.reload();
+    //       request.message(_this, '绑定权限成功', 'success');
+    //     }, 1000)
+    //   }, _this)
+    // },
+    // unbindit () {
+    //   let _this = this;
+    //   this.$confirm('此操作将批量解绑所选权限, 是否继续?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     request.$post('/role/auths/unbind', {
+    //       authIds: _this.batchPassArr,
+    //       roleId: _this.parentId
+    //     }, (res) => {
+    //       console.log(res.data);
+    //       setTimeout(function () {
+    //         _this.reload();
+    //         request.message(_this, '权限解绑成功', 'success');
+    //       }, 1000)
+    //     }, _this)
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '已取消解绑'
+    //     });
+    //   });
+    // },
+    handleSearch (val) {
+      let search = val;
+      if (search === '') {
+        this.finalShow = this.roleMenu1;
+      }
+      if (search !== '') {
+        this.finalShow = this.roleMenu1.filter(
+          (data) =>
+            !search || data.roleId.toString().includes(search.toString()) || data.name.toLowerCase().includes(search.toLowerCase())
+        );
+      }
+    },
+    // handleSearch1(val) {
+    //   let search1 = val;
+    //   if (search1 === '') {
+    //     this.finalShow1 = this.tableData;
+    //   }
+    //   if (search1 !== '') {
+    //     this.finalShow1 = this.tableData.filter(
+    //       (data) =>
+    //         !search1 || data.id.toString().includes(search1.toString()) || data.name.toLowerCase().includes(search1.toLowerCase())
+    //     );
+    //   }
+    // },
+    // handleSearch2(val) {
+    //   let search2 = val;
+    //   if (search2 === '') {
+    //     this.finalShow2 = this.tableDataAll;
+    //   }
+    //   if (search2 !== '') {
+    //     this.finalShow2 = this.tableDataAll.filter(
+    //       (data) =>
+    //         !search2 || data.id.toString().includes(search2.toString()) || data.name.toLowerCase().includes(search2.toLowerCase())
+    //     );
+    //   }
+    // },
+    handleSearch3 (val) {
+      let search3 = val;
+      if (search3 === '') {
+        this.finalShow3 = this.roleMenu;
+      }
+      if (search3 !== '') {
+        this.finalShow3 = this.roleMenu.filter(
+          (data) =>
+            !search3 || data.roleId.toString().includes(search3.toString()) || data.name.toLowerCase().includes(search3.toLowerCase())
+        );
+      }
+    },
+    handleSearch4 (val) {
+      let search4 = val;
+      if (search4 === '') {
+        this.finalShow4 = this.subList;
+      }
+      if (search4 !== '') {
+        this.finalShow4 = this.subList.filter(
+          (data) =>
+            !search4 || data.roleId.toString().includes(search4.toString()) || data.name.toLowerCase().includes(search4.toLowerCase())
+        );
+      }
+    }
+  },
+  watch: {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search (newVal) {
+      this.handleSearch(newVal);
+    },
+    // search1(newVal) {
+    //   this.handleSearch1(newVal);
+    // },
+    // search2(newVal) {
+    //   this.handleSearch2(newVal);
+    // },
+    search3 (newVal) {
+      this.handleSearch3(newVal);
+    },
+    search4 (newVal) {
+      this.handleSearch4(newVal);
     }
   }
+}
 </script>
 
 <style scoped>
