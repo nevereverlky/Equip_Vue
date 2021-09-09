@@ -31,6 +31,7 @@
           style="width: 100%"
           cell-style="font-size: 13px">
           <el-table-column>
+            <!-- eslint-disable-next-line -->
             <template slot="header" slot-scope="scope">
               <div style="display: flex;flex-direction: row;justify-content: space-between">
                 <el-input
@@ -285,6 +286,7 @@
               label="已绑定角色列表">
               <el-table-column
                 prop="id">
+                <!-- eslint-disable-next-line -->
                 <template slot="header" slot-scope="scope">
                   <el-input
                     scope
@@ -334,6 +336,7 @@
               label="可绑定角色概览">
               <el-table-column
                 prop="id">
+                <!-- eslint-disable-next-line -->
                 <template slot="header" slot-scope="scope">
                   <el-input
                     scope
@@ -363,17 +366,17 @@ export default {
   data () {
     return {
       // finalShow: [], // 用户总表
-      finalShow1: [], //1已绑定角色列表
-      finalShow2: [], //2可绑定角色概览
+      finalShow1: [], // 1已绑定角色列表
+      finalShow2: [], // 2可绑定角色概览
       search_account: '',
       search_realName: '',
       search_phone: '',
       search_mailbox: '',
-      search1: '', //input的值
-      search2: '', //input的值
+      search1: '', // input的值
+      search2: '', // input的值
       userData: [], // 用户总表
-      roleMenu: [], //2可绑定角色概览
-      tableData:[], //1已绑定角色列表
+      roleMenu: [], // 2可绑定角色概览
+      tableData: [], // 1已绑定角色列表
       multipleSelection: [],
       batchPassArr: [],
       multipleSelection2: [],
@@ -383,12 +386,12 @@ export default {
       useraccount: '',
       currentPage: 1, // 当前页码
       total: 20, // 总条数
-      userData_length: 0, //总条目数
+      userData_length: 0, // 总条目数
       pageSize: 10, // 每页的数据条数
       dialogupdateface: false,
       dialogimportface: false,
       dialogfaces: false,
-      dialogusers : false,
+      dialogusers: false,
       dialogedituser: false,
       dialogrole: false,
       userform: {
@@ -405,11 +408,11 @@ export default {
     this.getuserData();
   },
   methods: {
-    getuserData() {
+    getuserData () {
       let _this = this;
       request.$get('/user/users', {
         size: _this.pageSize,
-        fromIndex: _this.pageSize*(_this.currentPage-1),
+        fromIndex: _this.pageSize * (_this.currentPage - 1),
         account: _this.search_account,
         realName: _this.search_realName,
         phone: _this.search_phone,
@@ -426,7 +429,7 @@ export default {
         _this.finalShow1 = tabledata;
       }, _this);
     },
-    submitUpload() {
+    submitUpload () {
       let _this = this
       // const loading = _this.$loading({
       //   lock: true,
@@ -448,8 +451,8 @@ export default {
           _this.fileList.forEach(file => {
             formData.append('file', file.raw, file.raw.name);
           })
-          //向webapi发起请求，等待后台接收
-          request.$postFileList('/user/user/import', formData, {},(res) => {
+          // 向webapi发起请求，等待后台接收
+          request.$postFileList('/user/user/import', formData, {}, (res) => {
             console.log(res.data.data)
             setTimeout(() => {
               request.closeFullScreen(request.openFullScreen(_this));
@@ -465,7 +468,7 @@ export default {
         }
       }
     },
-    submitUpload1() {
+    submitUpload1 () {
       let _this = this
       // const loading = _this.$loading({
       //   lock: true,
@@ -487,8 +490,8 @@ export default {
           _this.fileList.forEach(file => {
             formData.append('picture', file.raw, file.raw.name);
           })
-          //向webapi发起请求，等待后台接收
-          request.$postFileList('/user/face/update', formData, {userId: _this.userId},(res) => {
+          // 向webapi发起请求，等待后台接收
+          request.$postFileList('/user/face/update', formData, {userId: _this.userId}, (res) => {
             console.log(res.data.data)
             setTimeout(() => {
               _this.getuserData();
@@ -502,7 +505,7 @@ export default {
         }
       }
     },
-    submitUpload2() {
+    submitUpload2 () {
       let _this = this
       // const loading = _this.$loading({
       //   lock: true,
@@ -520,26 +523,26 @@ export default {
           request.message(_this, '请检查，上传图像大小不能超过10MB!', 'error');
           request.closeFullScreen(request.openFullScreen(_this));
         } else {
-        var formData = new FormData(); //  用FormData存放上传文件
-        _this.fileList.forEach(file => {
-          formData.append('picture', file.raw, file.raw.name);
-        })
-        //向webapi发起请求，等待后台接收
-        request.$postFileList('/user/face/import', formData, {userId: _this.userId},(res) => {
-          console.log(res.data.data)
-          setTimeout(() => {
-            _this.getuserData();
-            // _this.reload();
-            request.closeFullScreen(request.openFullScreen(_this));
-            request.message(_this, '录入成功!', 'success');
-            _this.fileList = [];
-            _this.dialogimportface = false;
-          }, 1000);
-        }, _this);
+          var formData = new FormData(); //  用FormData存放上传文件
+          _this.fileList.forEach(file => {
+            formData.append('picture', file.raw, file.raw.name);
+          })
+          // 向webapi发起请求，等待后台接收
+          request.$postFileList('/user/face/import', formData, {userId: _this.userId}, (res) => {
+            console.log(res.data.data)
+            setTimeout(() => {
+              _this.getuserData();
+              // _this.reload();
+              request.closeFullScreen(request.openFullScreen(_this));
+              request.message(_this, '录入成功!', 'success');
+              _this.fileList = [];
+              _this.dialogimportface = false;
+            }, 1000);
+          }, _this);
         }
       }
     },
-    submitUpload3() {
+    submitUpload3 () {
       let _this = this
       // const loading = _this.$loading({
       //   lock: true,
@@ -557,21 +560,21 @@ export default {
           request.message(_this, '请检查，上传图像大小不能超过10MB!', 'error');
           request.closeFullScreen(request.openFullScreen(_this));
         } else {
-        var formData = new FormData(); //  用FormData存放上传文件
-        _this.fileList.forEach(file => {
-          formData.append('pictures', file.raw, file.raw.name);
-        })
-        //向webapi发起请求，等待后台接收
-        request.$postFileList('/user/faces/import', formData, {},(res) => {
-          console.log(res.data.data)
-          setTimeout(() => {
-            request.closeFullScreen(request.openFullScreen(_this));
-            _this.reload();
-            request.message(_this, '批量录入成功!', 'success');
-            _this.fileList = [];
-            _this.dialogfaces = false;
-          }, 1000);
-        }, _this);
+          var formData = new FormData(); //  用FormData存放上传文件
+          _this.fileList.forEach(file => {
+            formData.append('pictures', file.raw, file.raw.name);
+          })
+          // 向webapi发起请求，等待后台接收
+          request.$postFileList('/user/faces/import', formData, {}, (res) => {
+            console.log(res.data.data)
+            setTimeout(() => {
+              request.closeFullScreen(request.openFullScreen(_this));
+              _this.reload();
+              request.message(_this, '批量录入成功!', 'success');
+              _this.fileList = [];
+              _this.dialogfaces = false;
+            }, 1000);
+          }, _this);
         }
       }
     },
@@ -582,22 +585,22 @@ export default {
       this.dialogfaces = false;
       this.fileList = [];
     },
-    handlePreview(file) {
+    handlePreview (file) {
       console.log(file);
     },
-    //移除
-    handleRemove(file, fileList) {
+    // 移除
+    handleRemove (file, fileList) {
       this.fileList = fileList;
     },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+    beforeRemove (file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
     },
     // 选取文件超过数量提示
-    handleExceed(files, fileList) {
+    handleExceed (files, fileList) {
       this.$message.warning(`当前限制选择1个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
-    //监控上传文件列表
-    handleChange(file, fileList) {
+    // 监控上传文件列表
+    handleChange (file, fileList) {
       let existFile = fileList.slice(0, fileList.length - 1).find(f => f.name === file.name);
       if (existFile) {
         this.$message.error('当前文件已经存在!');
@@ -607,16 +610,16 @@ export default {
     },
     // 指定一个key标识这一行的数据
     getRowKey (row) {
-      return row.roleId //id为row的data属性之一，必须唯一且与tableData中保持一致
+      return row.roleId // id为row的data属性之一，必须唯一且与tableData中保持一致
     },
-    //每页条数改变时触发 选择一页显示多少行
+    // 每页条数改变时触发 选择一页显示多少行
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`);
       this.currentPage = 1;
       this.pageSize = val;
       this.getuserData();
     },
-    //当前页改变时触发 跳转其他页
+    // 当前页改变时触发 跳转其他页
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`);
       this.currentPage = val;
@@ -630,7 +633,7 @@ export default {
     getuser (e) {
       this.userform = e;
     },
-    getrole (s,e) {
+    getrole (s, e) {
       let _this = this;
       _this.userId = s.userId;
       _this.username = s.realName;
@@ -669,10 +672,10 @@ export default {
         }, 1000)
       }, _this);
     },
-    handleSelectionChange(val) {
+    handleSelectionChange (val) {
       this.multipleSelection = val;
-      this.batchPassArr = [] //每次点击需清空原本数组的内容
-      this.multipleSelection.map(item => { //遍历数组，把id存进自定义的数组里
+      this.batchPassArr = [] // 每次点击需清空原本数组的内容
+      this.multipleSelection.map(item => { // 遍历数组，把id存进自定义的数组里
         this.batchPassArr.push(item.id)
       })
       this.batchPassArr = this.batchPassArr.join(',')
@@ -683,10 +686,10 @@ export default {
       //   // _this.multipleSelection2 = [];
       // }
     },
-    handleSelectionChange2(val) {
+    handleSelectionChange2 (val) {
       this.multipleSelection2 = val;
-      this.batchPassArr2 = [] //每次点击需清空原本数组的内容
-      this.multipleSelection2.map(item => { //遍历数组，把id存进自定义的数组里
+      this.batchPassArr2 = [] // 每次点击需清空原本数组的内容
+      this.multipleSelection2.map(item => { // 遍历数组，把id存进自定义的数组里
         this.batchPassArr2.push(item.roleId)
       })
       this.batchPassArr2 = this.batchPassArr2.join(',')
@@ -745,7 +748,7 @@ export default {
               _this.roleMenu = rolemenu;
               _this.finalShow2 = rolemenu
             }, _this);
-           _this.getuserData();
+            _this.getuserData();
             _this.$nextTick(() => {
               _this.$refs.multipleTable.clearSelection();
               _this.$refs.multipleTable2.clearSelection();
@@ -816,47 +819,51 @@ export default {
             !search2 || data.roleId.toString().includes(search2.toString()) || data.name.toLowerCase().includes(search2.toLowerCase())
         );
       }
-    },
-  },
-    watch: {
-      //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-      search_account(newVal) {
-        this.handleSearch_account(newVal);
-      },
-      search_realName(newVal) {
-        this.handleSearch_realName(newVal);
-      },
-      search_phone(newVal) {
-        this.handleSearch_phone(newVal);
-      },
-      search_mailbox(newVal) {
-        this.handleSearch_mailbox(newVal);
-      },
-      search1(newVal) {
-        this.handleSearch1(newVal);
-      },
-      search2(newVal) {
-        this.handleSearch2(newVal);
-      },
     }
+  },
+  watch: {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search_account (newVal) {
+      this.handleSearch_account(newVal);
+    },
+    search_realName (newVal) {
+      this.handleSearch_realName(newVal);
+    },
+    search_phone (newVal) {
+      this.handleSearch_phone(newVal);
+    },
+    search_mailbox (newVal) {
+      this.handleSearch_mailbox(newVal);
+    },
+    search1 (newVal) {
+      this.handleSearch1(newVal);
+    },
+    search2 (newVal) {
+      this.handleSearch2(newVal);
+    }
+  }
 }
 </script>
 
-<style scoped>
-  >>>.el-upload-list__item{
-    height: 22px;
+<style lang="less">
+//不要加scoped
+//scoped作用：控制style内css的作用域就是当前这个组件
+//scoped的实现原理：vue中的scoped属性的效果主要通过PostCSS转译实现
+//即：PostCSS给一个组件中的所有dom添加了一个独一无二的动态属性，然后，给CSS选择器额外添加一个对应的属性选择器来选择该组件中dom，这种做法使得样式只作用于含有该属性的dom——组件内部dom。
+  .el-upload-list__item{
+    height: 22px !important
   }
 
-  >>>.upload-demo{
-    width: 100%
+  .upload-demo{
+    width: 100% !important
   }
 
-  >>>.el-upload--text{
-    width: 100%
+  .el-upload--text{
+    width: 100% !important
   }
 
-  >>>.el-upload-dragger{
-    width: 100%
+  .el-upload-dragger{
+    width: 100% !important
   }
 
 </style>

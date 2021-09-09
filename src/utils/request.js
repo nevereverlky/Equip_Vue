@@ -92,8 +92,8 @@ export default {
       type: type
     })
   },
-  //Loading加载
-  openFullScreen(that) {
+  // Loading加载
+  openFullScreen (that) {
     const loading = that.$loading({
       lock: true,
       text: '操作执行中，请稍后',
@@ -102,7 +102,7 @@ export default {
     });
     return loading;
   },
-  closeFullScreen(loading){
+  closeFullScreen (loading) {
     loading.close();
-  },
+  }
 }

@@ -27,6 +27,7 @@
               :header-cell-style="{color: 'black', fontSize: '14px'}">
               <el-table-column
                 prop="id">
+                <!-- eslint-disable-next-line -->
                 <template slot="header" slot-scope="scope">
                   <el-input
                     scope
@@ -96,6 +97,7 @@
                   label="已绑定接口列表">
                   <el-table-column
                     prop="name">
+                    <!-- eslint-disable-next-line -->
                     <template slot="header" slot-scope="scope">
                       <el-input
                         scope
@@ -148,6 +150,7 @@
                   label="可绑定接口概览">
                   <el-table-column
                     prop="name">
+                    <!-- eslint-disable-next-line -->
                     <template slot="header" slot-scope="scope">
                       <el-input
                         scope
@@ -193,6 +196,7 @@
               label="参考接口">
               <el-table-column
                 prop="name">
+                <!-- eslint-disable-next-line -->
                 <template slot="header" slot-scope="scope">
                   <el-input
                     scope
@@ -238,30 +242,30 @@ export default {
   inject: ['reload'],
   data () {
     return {
-      finalShow1: [], //1已绑定接口列表
-      finalShow2: [], //2可绑定接口概览
-      finalShow3: [], //3侧边权限总览
-      finalShow4: [], //4接口概览
-      search1: '', //input的值
-      search2: '', //input的值
-      search3: '', //input的值
-      search4: '', //input的值
+      finalShow1: [], // 1已绑定接口列表
+      finalShow2: [], // 2可绑定接口概览
+      finalShow3: [], // 3侧边权限总览
+      finalShow4: [], // 4接口概览
+      search1: '', // input的值
+      search2: '', // input的值
+      search3: '', // input的值
+      search4: '', // input的值
       authoritytitle: '',
       authId: '',
-      authorityMenu: [], //3侧边权限总览
-      tableData: [], //1已绑定接口列表
-      tableDataAll: [], //2可绑定接口概览
-      tableDataAll1: [], //4接口概览
+      authorityMenu: [], // 3侧边权限总览
+      tableData: [], // 1已绑定接口列表
+      tableDataAll: [], // 2可绑定接口概览
+      tableDataAll1: [], // 4接口概览
       multipleSelection: [],
       batchPassArr: [],
       multipleSelection2: [],
       batchPassArr2: [],
       dialogaddauthority: false,
       dialogeditauthority: false,
-      form1:{
+      form1: {
         name: ''
       },
-      form2:{
+      form2: {
         name: ''
       },
       formLabelWidth: '80px'
@@ -278,7 +282,7 @@ export default {
     }, _this);
   },
   methods: {
-    getauthData() {
+    getauthData () {
       let _this = this;
       request.$get('/auth/auths', {}, (res) => {
         console.log(res.data.data);
@@ -288,14 +292,14 @@ export default {
       }, _this);
     },
     checkable (row, rowIndex) {
-      if(!row.using){
-        return false;//禁用
-      }else{
-        return true;//不禁用
+      if (!row.using) {
+        return false;// 禁用
+      } else {
+        return true;// 不禁用
       }
     },
     // 指定一个key标识这一行的数据
-    //可绑定接口概览
+    // 可绑定接口概览
     // getRowKey (row) {
     //   return row //id为row的data属性之一
     // },
@@ -303,13 +307,13 @@ export default {
     // getRowKeys (row) {
     //   return row.uri //id为row的data属性之一
     // },
-    geturi (s,e) {
+    geturi (s, e) {
       this.authId = s;
       this.authoritytitle = e;
       this.form2.name = e;
       this.geturiData();
     },
-    geturiData() {
+    geturiData () {
       let _this = this;
       this.$nextTick(() => {
         this.$refs.multipleTable.clearSelection();
@@ -340,32 +344,32 @@ export default {
     },
     addauthority () {
       let _this = this;
-        request.$post('/auth/add', {
-          name: _this.form1.name
-        }, (res) => {
-          console.log(res.data);
-          _this.dialogaddauthority = false;
-          setTimeout(function () {
-            _this.reload();
-            request.message(_this, '权限添加成功', 'success');
-          }, 1000)
-        }, _this)
+      request.$post('/auth/add', {
+        name: _this.form1.name
+      }, (res) => {
+        console.log(res.data);
+        _this.dialogaddauthority = false;
+        setTimeout(function () {
+          _this.reload();
+          request.message(_this, '权限添加成功', 'success');
+        }, 1000)
+      }, _this)
     },
     editauthority () {
       let _this = this
-        request.$post('/auth/update', {
-          name: _this.form2.name,
-          authorityId: _this.authId
-        }, (res) => {
-          console.log(res.data);
-          _this.dialogeditauthority = false;
-          setTimeout(function () {
-            _this.authoritytitle = _this.form2.name;
-            _this.getauthData();
-            // _this.reload();
-            request.message(_this, '权限更新成功', 'success');
-          }, 1000)
-        }, _this)
+      request.$post('/auth/update', {
+        name: _this.form2.name,
+        authorityId: _this.authId
+      }, (res) => {
+        console.log(res.data);
+        _this.dialogeditauthority = false;
+        setTimeout(function () {
+          _this.authoritytitle = _this.form2.name;
+          _this.getauthData();
+          // _this.reload();
+          request.message(_this, '权限更新成功', 'success');
+        }, 1000)
+      }, _this)
     },
     removeauthority () {
       let _this = this;
@@ -390,10 +394,10 @@ export default {
         });
       });
     },
-    handleSelectionChange(val) {
+    handleSelectionChange (val) {
       this.multipleSelection = val;
-      this.batchPassArr = [] //每次点击需清空原本数组的内容
-      this.multipleSelection.map(item => { //遍历数组，把id存进自定义的数组里
+      this.batchPassArr = [] // 每次点击需清空原本数组的内容
+      this.multipleSelection.map(item => { // 遍历数组，把id存进自定义的数组里
         this.batchPassArr.push(item.uri)
       })
       this.batchPassArr = this.batchPassArr.join(',')
@@ -404,10 +408,10 @@ export default {
       //   // _this.multipleSelection2 = [];
       // }
     },
-    handleSelectionChange2(val) {
+    handleSelectionChange2 (val) {
       this.multipleSelection2 = val;
-      this.batchPassArr2 = [] //每次点击需清空原本数组的内容
-      this.multipleSelection2.map(item => { //遍历数组，把id存进自定义的数组里
+      this.batchPassArr2 = [] // 每次点击需清空原本数组的内容
+      this.multipleSelection2.map(item => { // 遍历数组，把id存进自定义的数组里
         this.batchPassArr2.push(item)
       })
       this.batchPassArr2 = this.batchPassArr2.join(',')
@@ -489,7 +493,7 @@ export default {
         });
       });
     },
-    handleSearch1(val) {
+    handleSearch1 (val) {
       let search1 = val;
       if (search1 === '') {
         this.finalShow1 = this.tableData;
@@ -501,7 +505,7 @@ export default {
         );
       }
     },
-    handleSearch2(val) {
+    handleSearch2 (val) {
       let search2 = val;
       if (search2 === '') {
         this.finalShow2 = this.tableDataAll;
@@ -513,7 +517,7 @@ export default {
         );
       }
     },
-    handleSearch3(val) {
+    handleSearch3 (val) {
       let search3 = val;
       if (search3 === '') {
         this.finalShow3 = this.authorityMenu;
@@ -525,7 +529,7 @@ export default {
         );
       }
     },
-    handleSearch4(val) {
+    handleSearch4 (val) {
       let search4 = val;
       if (search4 === '') {
         this.finalShow4 = this.tableDataAll1;
@@ -536,22 +540,22 @@ export default {
             !search4 || data.toLowerCase().includes(search4.toLowerCase())
         );
       }
-    },
+    }
   },
   watch: {
-    //watch监视input输入值的变化,只要是watch变化了 search()就会被调用
-    search1(newVal) {
+    // watch监视input输入值的变化,只要是watch变化了 search()就会被调用
+    search1 (newVal) {
       this.handleSearch1(newVal);
     },
-    search2(newVal) {
+    search2 (newVal) {
       this.handleSearch2(newVal);
     },
-    search3(newVal) {
+    search3 (newVal) {
       this.handleSearch3(newVal);
     },
-    search4(newVal) {
+    search4 (newVal) {
       this.handleSearch4(newVal);
-    },
+    }
   }
 }
 </script>

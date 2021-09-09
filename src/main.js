@@ -21,7 +21,7 @@ import './assets/css/sidebar-menu.css'
 // Vue.use(Vuex)
 // Vue.prototype.$axios = axios
 // Vue.prototype.$qs = qs
-//配置请求的根路径
+// 配置请求的根路径
 axios.defaults.baseURL = "/api"
 Vue.config.productionTip = false
 
@@ -33,7 +33,7 @@ Vue.filter('dateFormat', function (originVal) {
   const hh = (dt.getHours() + '').padStart(2, '0')
   const mm = (dt.getMinutes() + '').padStart(2, '0')
   const ss = (dt.getSeconds() + '').padStart(2, '0')
-  //时间格式年月日、时分秒
+  // 时间格式年月日、时分秒
   return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
 })
 
@@ -55,7 +55,7 @@ Vue.filter('dateFormat', function (originVal) {
 //   }
 // });
 
-//判断是否登录
+// 判断是否登录
 // router.beforeEach(function (to, from, next) {
 //   let token = request.localStorageGet('token');
 //     console.log(token)
@@ -91,7 +91,7 @@ var vue = new Vue({
   router,
   store,
   render: h => h(App),
-  components:{
+  components: {
     App
   }
 }).$mount('#app')

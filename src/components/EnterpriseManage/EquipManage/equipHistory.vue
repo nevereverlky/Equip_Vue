@@ -203,53 +203,53 @@
 </template>
 
 <script>
-  import request from '../../../utils/request'
-  import eventBus from '../../../utils/eventBus'
-  export default {
-    name: 'equipHistory',
-    data() {
-      return {
-        equipId: '',
-        tagHistory: [],
-        equipHistory: [],
-        equipData: ''
-      }
-    },
-    // beforeCreate(){
-    //   let _this = this;
-    //   eventBus.$on('equipId',(message)=>{
-    //     this.equipId = message;
-    //     request.$get('/equipment/equipment', {
-    //       equipId: message
-    //     }, (res) => {
-    //       console.log(res.data.data);
-    //       let equipData = res.data.data;
-    //       _this.equipData = equipData;
-    //     }, _this);
-    //   });
-    // },
-    // beforeDestroy() {
-    //   eventBus.$off();
-    // },
-    created () {
-      let _this = this;
-      let equipId = this.$route.query.equipId;
-      _this.equipId = equipId;
-      request.$get('/tag/web/histories', {
-        equipId: equipId
-      }, (res) => {
-        console.log(res.data.data);
-        let equipdata = res.data.data.equipHistory.equipment;
-        let taghistory = res.data.data.tagHistory.histories;
-        let equiphistory = res.data.data.equipHistory.histories;
-        _this.equipData = equipdata;
-        _this.tagHistory = taghistory;
-        _this.equipHistory = equiphistory;
-      }, _this);
-    },
-    methods: {
+import request from '../../../utils/request'
+import eventBus from '../../../utils/eventBus'
+export default {
+  name: 'equipHistory',
+  data () {
+    return {
+      equipId: '',
+      tagHistory: [],
+      equipHistory: [],
+      equipData: ''
     }
+  },
+  // beforeCreate(){
+  //   let _this = this;
+  //   eventBus.$on('equipId',(message)=>{
+  //     this.equipId = message;
+  //     request.$get('/equipment/equipment', {
+  //       equipId: message
+  //     }, (res) => {
+  //       console.log(res.data.data);
+  //       let equipData = res.data.data;
+  //       _this.equipData = equipData;
+  //     }, _this);
+  //   });
+  // },
+  // beforeDestroy() {
+  //   eventBus.$off();
+  // },
+  created () {
+    let _this = this;
+    let equipId = this.$route.query.equipId;
+    _this.equipId = equipId;
+    request.$get('/tag/web/histories', {
+      equipId: equipId
+    }, (res) => {
+      console.log(res.data.data);
+      let equipdata = res.data.data.equipHistory.equipment;
+      let taghistory = res.data.data.tagHistory.histories;
+      let equiphistory = res.data.data.equipHistory.histories;
+      _this.equipData = equipdata;
+      _this.tagHistory = taghistory;
+      _this.equipHistory = equiphistory;
+    }, _this);
+  },
+  methods: {
   }
+}
 </script>
 
 <style scoped>

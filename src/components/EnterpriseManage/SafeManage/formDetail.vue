@@ -107,77 +107,77 @@
 </template>
 
 <script>
-  import request from '../../../utils/request'
-  import eventBus from '../../../utils/eventBus'
-  export default {
-    name: 'formDetail',
-    inject: ['reload'],
-    data() {
-      return {
-        formId: '',
-        formtype: '',
-        formDetail: '',
-        equipment: ''
-      }
-    },
-    // beforeCreate(){
-    //   let _this = this;
-      // eventBus.$on('formId',(message)=>{
-      //   _this.formId = formId;
-      //   request.$get('/securityForm/form', {
-      //     formId: formId
-      //   }, (res) => {
-      //     console.log(res.data.data);
-      //     let formdetail = res.data.data;
-      //     _this.formDetail = formdetail;
-      //   }, _this);
-      // });
-      // eventBus.$on('formtype',(message)=>{
-      //   if (formtype ==='UNINITIALIZED_GUARD') {
-      //     _this.formtype = '未初始化门禁';
-      //   }else if (formtype === 'INVALID_TAG'){
-      //     _this.formtype = '标签非法流通';
-      //   }else if (formtype === 'UNINITIALIZED_TAG') {
-      //     _this.formtype = '未初始化标签';
-      //   }else if (formtype === 'UNINITIALIZED_GUARD_TAG') {
-      //     _this.formtype = '未初始化门禁与标签';
-      //   }
-      // });
-    // },
-    // beforeDestroy() {
-    //   eventBus.$off();
-    // },
-    created () {
+import request from '../../../utils/request'
+import eventBus from '../../../utils/eventBus'
+export default {
+  name: 'formDetail',
+  inject: ['reload'],
+  data () {
+    return {
+      formId: '',
+      formtype: '',
+      formDetail: '',
+      equipment: ''
+    }
+  },
+  // beforeCreate(){
+  //   let _this = this;
+  // eventBus.$on('formId',(message)=>{
+  //   _this.formId = formId;
+  //   request.$get('/securityForm/form', {
+  //     formId: formId
+  //   }, (res) => {
+  //     console.log(res.data.data);
+  //     let formdetail = res.data.data;
+  //     _this.formDetail = formdetail;
+  //   }, _this);
+  // });
+  // eventBus.$on('formtype',(message)=>{
+  //   if (formtype ==='UNINITIALIZED_GUARD') {
+  //     _this.formtype = '未初始化门禁';
+  //   }else if (formtype === 'INVALID_TAG'){
+  //     _this.formtype = '标签非法流通';
+  //   }else if (formtype === 'UNINITIALIZED_TAG') {
+  //     _this.formtype = '未初始化标签';
+  //   }else if (formtype === 'UNINITIALIZED_GUARD_TAG') {
+  //     _this.formtype = '未初始化门禁与标签';
+  //   }
+  // });
+  // },
+  // beforeDestroy() {
+  //   eventBus.$off();
+  // },
+  created () {
+    let _this = this;
+    let formId = this.$route.query.formId;
+    let formtype = this.$route.query.formtype;
+    _this.formId = formId;
+    _this.getformDetail();
+    if (formtype === 'UNINITIALIZED_GUARD') {
+      _this.formtype = '未初始化门禁';
+    } else if (formtype === 'INVALID_TAG') {
+      _this.formtype = '标签非法流通';
+    } else if (formtype === 'UNINITIALIZED_TAG') {
+      _this.formtype = '未初始化标签';
+    } else if (formtype === 'UNINITIALIZED_GUARD_TAG') {
+      _this.formtype = '未初始化门禁与标签';
+    }
+  },
+  methods: {
+    getformDetail () {
       let _this = this;
-      let formId = this.$route.query.formId;
-      let formtype = this.$route.query.formtype;
-      _this.formId = formId;
-      _this.getformDetail();
-      if (formtype ==='UNINITIALIZED_GUARD') {
-        _this.formtype = '未初始化门禁';
-      }else if (formtype === 'INVALID_TAG'){
-        _this.formtype = '标签非法流通';
-      }else if (formtype === 'UNINITIALIZED_TAG') {
-        _this.formtype = '未初始化标签';
-      }else if (formtype === 'UNINITIALIZED_GUARD_TAG') {
-        _this.formtype = '未初始化门禁与标签';
-      }
-    },
-    methods: {
-      getformDetail() {
-        let _this = this;
-        request.$get('/securityForm/form/alarm', {
-          formId: _this.formId
-        }, (res) => {
-          console.log(res.data.data);
-          let formdetail = res.data.data;
-          let equipment = res.data.data.equipment;
-          _this.equipment = equipment;
-          _this.formDetail = formdetail;
-        }, _this);
-      }
+      request.$get('/securityForm/form/alarm', {
+        formId: _this.formId
+      }, (res) => {
+        console.log(res.data.data);
+        let formdetail = res.data.data;
+        let equipment = res.data.data.equipment;
+        _this.equipment = equipment;
+        _this.formDetail = formdetail;
+      }, _this);
     }
   }
+}
 </script>
 
 <style scoped>

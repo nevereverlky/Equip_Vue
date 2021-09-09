@@ -178,133 +178,130 @@
 </template>
 
 <script>
-  import request from '../../utils/request'
-  export default {
-    name: 'equipCart',
-    data() {
-      return{
-        typeMenu: ''
-      }
+import request from '../../utils/request'
+export default {
+  name: 'equipCart',
+  data () {
+    return {
+      typeMenu: ''
+    }
+  },
+  mounted () {
+    this.getData();
+  },
+  methods: {
+    getData () {
+      let _this = this;
+      request.$get('/securityForm/types/alarm', {}, (res) => {
+        console.log(res.data.data);
+        let typemenu = res.data.data;
+        _this.typeMenu = typemenu;
+        _this.gettotal_actions();
+        _this.getpage_views();
+        _this.getaudience_growth();
+      }, _this);
     },
-    mounted() {
-      this.getData();
+    gettotal_actions () {
+      let ctx = document.getElementById('total-actions').getContext('2d');
+
+      let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['01', '02', '03', '04', '05', '06', '07'],
+          datasets: [{
+            label: '门禁警报次数',
+            data: [15, 8, 12, 5, 12, 8, 16],
+            backgroundColor: 'rgba(20, 171, 239, 0.24)',
+            borderColor: '#14abef',
+            pointBackgroundColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointBorderColor: '#14abef',
+            pointHoverBorderColor: '#14abef',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 4,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          legend: {
+            position: false,
+            display: true
+          },
+          tooltips: {
+            displayColors: false
+          }
+        }
+      });
     },
-    methods: {
-      getData () {
-        let _this = this;
-        request.$get('/securityForm/types/alarm', {}, (res) => {
-          console.log(res.data.data);
-          let typemenu = res.data.data;
-          _this.typeMenu = typemenu;
-          _this.gettotal_actions();
-          _this.getpage_views();
-          _this.getaudience_growth();
-        }, _this);
-      },
-      gettotal_actions() {
-        let ctx = document.getElementById('total-actions').getContext('2d');
+    getpage_views () {
+      let ctx = document.getElementById('page-views').getContext('2d');
 
-        let myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['01', '02', '03', '04', '05', '06', '07'],
-            datasets: [{
-              label: '门禁警报次数',
-              data: [15, 8, 12, 5, 12, 8, 16],
-              backgroundColor: 'rgba(20, 171, 239, 0.24)',
-              borderColor: '#14abef',
-              pointBackgroundColor:'#fff',
-              pointHoverBackgroundColor:'#fff',
-              pointBorderColor :'#14abef',
-              pointHoverBorderColor :'#14abef',
-              pointBorderWidth :2,
-              pointRadius :4,
-              pointHoverRadius :4,
-              borderWidth: 3,
-            }]
+      let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['01', '02', '03', '04', '05', '06', '07'],
+          datasets: [{
+            label: '流转设备数',
+            data: [20, 35, 40, 20, 35, 25, 60],
+            backgroundColor: 'rgba(59, 89, 152, 0.24)',
+            borderColor: '#3b5998',
+            pointBackgroundColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointBorderColor: '#3b5998',
+            pointHoverBorderColor: '#3b5998',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 4,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          legend: {
+            position: false,
+            display: true
+          },
+          tooltips: {
+            displayColors: false
           }
-          ,
-          options: {
-            legend: {
-              position: false,
-              display: true,
-            },
-            tooltips: {
-              displayColors:false,
-            }
-          }
-        });
-      },
-      getpage_views() {
-        let ctx = document.getElementById('page-views').getContext('2d');
+        }
+      });
+    },
+    getaudience_growth () {
+      let ctx = document.getElementById('audience-growth').getContext('2d');
 
-        let myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['01', '02', '03', '04', '05', '06', '07'],
-            datasets: [{
-              label: '流转设备数',
-              data: [20, 35, 40, 20, 35, 25, 60],
-              backgroundColor: 'rgba(59, 89, 152, 0.24)',
-              borderColor: '#3b5998',
-              pointBackgroundColor:'#fff',
-              pointHoverBackgroundColor:'#fff',
-              pointBorderColor :'#3b5998',
-              pointHoverBorderColor :'#3b5998',
-              pointBorderWidth :2,
-              pointRadius :4,
-              pointHoverRadius :4,
-              borderWidth: 3,
-            }]
+      let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['01', '02', '03', '04', '05', '06', '07'],
+          datasets: [{
+            label: '申请数',
+            data: [55, 40, 45, 20, 40, 20, 40],
+            backgroundColor: 'rgba(20, 171, 239, 0.24)',
+            borderColor: '#14abef',
+            pointBackgroundColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointBorderColor: '#14abef',
+            pointHoverBorderColor: '#14abef',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 4,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          legend: {
+            position: false,
+            display: true
+          },
+          tooltips: {
+            displayColors: false
           }
-          ,
-          options: {
-            legend: {
-              position: false,
-              display: true,
-            },
-            tooltips: {
-              displayColors:false,
-            }
-          }
-        });
-      },
-      getaudience_growth() {
-        let ctx = document.getElementById('audience-growth').getContext('2d');
-
-        let myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['01', '02', '03', '04', '05', '06', '07'],
-            datasets: [{
-              label: '申请数',
-              data: [55, 40, 45, 20, 40, 20, 40],
-              backgroundColor: 'rgba(20, 171, 239, 0.24)',
-              borderColor: '#14abef',
-              pointBackgroundColor:'#fff',
-              pointHoverBackgroundColor:'#fff',
-              pointBorderColor :'#14abef',
-              pointHoverBorderColor :'#14abef',
-              pointBorderWidth :2,
-              pointRadius :4,
-              pointHoverRadius :4,
-              borderWidth: 3,
-            }]
-          }
-          ,
-          options: {
-            legend: {
-              position: false,
-              display: true,
-            },
-            tooltips: {
-              displayColors:false,
-            }
-          }
-        });
-      },
+        }
+      });
     }
   }
+}
 </script>
 
 <style scoped>

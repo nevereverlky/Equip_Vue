@@ -117,7 +117,7 @@ import request from '../utils/request'
 export default {
   name: 'Sidebar',
   inject: ['reload'],
-  data() {
+  data () {
     return {
       isCollapse: true
     };
@@ -146,14 +146,14 @@ export default {
     min-height: 400px;
   }
 
-  >>>.simplebar-scrollbar {
+  .simplebar-scrollbar {
     position: absolute;
     right: 0px;
     width: 5px;
     min-height: 10px;
   }
 
-  >>>.simplebar-content{
+  .simplebar-content{
     overflow-x: hidden
   }
 </style>
