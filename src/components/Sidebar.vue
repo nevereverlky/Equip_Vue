@@ -18,7 +18,7 @@
           <ul class="user-setting-menu" style="margin-top: 0px">
             <!--<li><a><i class="icon-user"></i>管理员档案</a></li>-->
             <!--<li><a><i class="icon-settings"></i>设置</a></li>-->
-            <li @click="tologin"><a href="javascript:void(0);" style="color: #f5365c"><i class="icon-power"></i>注销</a></li>
+            <li @click="tologin"><a href="javascript:void(0);" style="color: #f5365c"><i class="zmdi zmdi-power"></i>注销</a></li>
           </ul>
         <!--</div>-->
       </div>
@@ -75,10 +75,6 @@
           </a>
           <ul class="sidebar-submenu">
             <li><router-link tag="a" to="/userlist"><i class="zmdi zmdi-long-arrow-right"></i>基本信息管理</router-link></li>
-            <li><router-link tag="a" to="/rolelist1"><i class="zmdi zmdi-long-arrow-right"></i>企业管理员</router-link></li>
-            <li><router-link tag="a" to="/rolelist2"><i class="zmdi zmdi-long-arrow-right"></i>设备管理员</router-link></li>
-            <li><router-link tag="a" to="/rolelist3"><i class="zmdi zmdi-long-arrow-right"></i>系统装维员</router-link></li>
-            <li><router-link tag="a" to="/rolelist4"><i class="zmdi zmdi-long-arrow-right"></i>普通用户</router-link></li>
           </ul>
         </li>
         <li>
@@ -98,11 +94,6 @@
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="sidebar-submenu">
-            <li><a href="#"><i class="zmdi zmdi-long-arrow-right"></i>报废状态</a></li>
-            <li><a href="#"><i class="zmdi zmdi-long-arrow-right"></i>维修状态</a></li>
-            <li><a href="#"><i class="zmdi zmdi-long-arrow-right"></i>损坏遗失</a></li>
-            <li><a href="#"><i class="zmdi zmdi-long-arrow-right"></i>更新状态</a></li>
-            <li><a href="#"><i class="zmdi zmdi-long-arrow-right"></i>正常状态</a></li>
           </ul>
         </li>
       </ul>

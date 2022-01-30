@@ -28,7 +28,7 @@
                                       <label for="exampleInputUsername" class="sr-only">账号</label>
                                       <input type="text" v-model="loginForm.account" id="exampleInputUsername" class="form-control" placeholder="账号">
                                       <div class="form-control-position" style="padding-top: 20px">
-                                          <i class="icon-user"></i>
+                                          <i class="zmdi zmdi-account"></i>
                                       </div>
                                   </div>
                               </div>
@@ -37,7 +37,7 @@
                                       <label for="exampleInputPassword" class="sr-only">密码</label>
                                       <input type="password" v-model="loginForm.password" id="exampleInputPassword" class="form-control" placeholder="密码">
                                       <div class="form-control-position" style="padding-top: 20px">
-                                          <i class="icon-lock"></i>
+                                          <i class="zmdi zmdi-lock"></i>
                                       </div>
                                   </div>
                               </div>

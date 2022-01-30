@@ -23,12 +23,12 @@ const createLintingRule = () => ({
 
 module.exports = {
   externals: {
-    'vue': 'Vue',
-    'element-ui': 'ElementUI',
-    'axios': 'axios',
-    'qs': 'QS',
-    'vuex': 'Vuex',
-    'vue-router': 'VueRouter',
+    // 'vue': 'Vue',
+    // 'element-ui': 'ElementUI',
+    // 'axios': 'axios',
+    // 'qs': 'QS',
+    // 'vuex': 'Vuex',
+    // 'vue-router': 'VueRouter',
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('common.js'),
