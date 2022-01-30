@@ -2,25 +2,25 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import Vue from 'vue'
-// import ElementUI from 'element-ui'
+import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue'
 import router from './router'
-// import Vuex from 'vuex'
+import Vuex from 'vuex'
 import store from './store'
 import 'babel-polyfill'
-// import axios from 'axios'
-// import VueAxios from 'vue-axios'
-// import qs from 'QS'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import qs from 'QS'
 
 import './assets/css/app-style.css'
 import './assets/css/sidebar-menu.css'
 
-// Vue.use(ElementUI)
-// Vue.use(VueAxios, axios)
-// Vue.use(Vuex)
-// Vue.prototype.$axios = axios
-// Vue.prototype.$qs = qs
+Vue.use(ElementUI)
+Vue.use(VueAxios, axios)
+Vue.use(Vuex)
+Vue.prototype.$axios = axios
+Vue.prototype.$qs = qs
 // 配置请求的根路径
 axios.defaults.baseURL = "/api"
 Vue.config.productionTip = false
@@ -77,15 +77,6 @@ Vue.filter('dateFormat', function (originVal) {
 //   }
 // });
 
-/* eslint-disable no-new */
-// new Vue({
-//   el: '#app',
-//   router,
-//   store,
-//   // render: h => h(App)
-//   components: { App },
-//   template: '<App/>'
-// });
 // vue实例化
 var vue = new Vue({
   router,
